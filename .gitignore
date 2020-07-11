@@ -47,3 +47,5 @@ spikes/contacts_creator/*.csv
 /.firebase
 .firebaserc
 firebase.json
+/msgraphtest/cs/GraphTestCS/GraphTestCS/obj
+/msgraphtest/cs/GraphTestCS/.vs/GraphTestCS/v16/.suo
