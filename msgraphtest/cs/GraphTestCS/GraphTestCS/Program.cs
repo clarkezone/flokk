@@ -9,10 +9,8 @@ namespace GraphTestCS
 
         static async Task Main(string[] args)
         {
-            //TODO: open webbrowser for WLID auth, print out token
-            //TODO: read token from cmdline
-
-            string accessToken = "";
+            //TODO get a token from msgraphtest\cs\TokenGetterCS
+            string accessToken = replacewithtoken;
 
             var graphServiceClient = new Microsoft.Graph.GraphServiceClient(new Microsoft.Graph.DelegateAuthenticationProvider((request) =>
             {
@@ -21,6 +19,7 @@ namespace GraphTestCS
 
             }));
 
+            var me = await graphServiceClient.Me.Request().GetAsync();
             var calendars = await graphServiceClient.Me.Calendars.Request().GetAsync();
 
             foreach (var item in calendars)
