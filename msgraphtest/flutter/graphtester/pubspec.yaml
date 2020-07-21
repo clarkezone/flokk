@@ -36,6 +36,10 @@ dev_dependencies:
     git: https://github.com/allanwei/msgraph.git
   msauth:
     git: https://github.com/allanwei/msauth.git
+  webviewpopupauth:
+    git:
+      url: https://github.com/clarkezone/flutter_win_webview.git
+      path: ./webview_popupauth
 
 
 # For information on the generic Dart part of this file, see the
