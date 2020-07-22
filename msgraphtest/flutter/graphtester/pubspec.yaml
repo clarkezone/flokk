@@ -23,7 +23,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  msgraph:
+    git: https://github.com/allanwei/msgraph.git
+  msauth:
+    git: https://github.com/allanwei/msauth.git
+  # webviewpopupauth:
+  #   git:
+  #     url: https://github.com/clarkezone/flutter_win_webview.git
+  #     path: ./webview_popupauth
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -32,14 +39,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  msgraph:
-    git: https://github.com/allanwei/msgraph.git
-  msauth:
-    git: https://github.com/allanwei/msauth.git
   webviewpopupauth:
-    git:
-      url: https://github.com/clarkezone/flutter_win_webview.git
-      path: ./webview_popupauth
+      path: /src/github.com/clarkezone/flutter_win_webview/webview_popupauth
 
 
 # For information on the generic Dart part of this file, see the

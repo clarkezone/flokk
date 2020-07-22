@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:msgraph/msgraph.dart';
+import 'package:webviewpopupauth/popupauth.dart';
 
 void main() {
   runApp(MyApp());
@@ -53,13 +54,37 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String _counter = "";
 
+  // user defined function
+  void _showDialog(String content) {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Alert Dialog title"),
+          content: new Text(content),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future _getMe() async {
     //TODO: Obtain a token using msgraphtest\cs\TokenGetterCS
     //TODO: Fill in here in the form "bearer <tokenstring>"
-    var msGraph = MsGraph(replacewithtoken);
-      var me = await msGraph.me.get(); //get me
-      
-      _setResult(String.fromCharCodes(me));
+    var msGraph = MsGraph("replacewithtoken");
+    var me = await msGraph.me.get(); //get me
+
+    _setResult(String.fromCharCodes(me));
   }
 
   void _setResult(String result) {
@@ -70,7 +95,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() async {
     await _getMe();
-    
+  }
+
+  void _showAuth() async {
+    var result = await showOpenPanel(url: "http://microsoft.com");
+    if (result != null) {
+      _showDialog(result.token);
+      print(result);
+    }
   }
 
   @override
@@ -91,20 +123,6 @@ class _MyHomePageState extends State<MyHomePage> {
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
@@ -117,10 +135,20 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: RaisedButton(
-        onPressed: _incrementCounter,
-        
-        child: Text("Get Me from graph"),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(left: 50),
+        child: Row(
+          children: [
+            RaisedButton(
+              onPressed: _showAuth,
+              child: Text("Show web auth"),
+            ),
+            RaisedButton(
+              onPressed: _incrementCounter,
+              child: Text("Get Me from graph"),
+            ),
+          ],
+        ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
