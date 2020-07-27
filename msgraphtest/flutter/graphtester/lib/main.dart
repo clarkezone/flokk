@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:msgraph/msgraph.dart';
+import 'package:aad_oauth/aad_oauth.dart';
+import 'package:aad_oauth/model/config.dart';
 
 void main() {
   runApp(MyApp());
@@ -51,15 +53,59 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  static String currentToken = "";
+
+  //Azure AAD
+  //This does work
+  static final Config configAzureADMS = new Config(
+    ReplaceWithtenanID, //tenantID
+    ReplaceWithClientID, //client ID
+    "openid profile offline_access user.read people.read", //scope
+    "https://login.microsoftonline.com/common/oauth2/nativeclient", //callbackURL
+  );
+
+  final AadOAuth oauth = new AadOAuth(configAzureADMS);
   String _counter = "";
 
   Future _getMe() async {
-    //TODO: Obtain a token using msgraphtest\cs\TokenGetterCS
-    //TODO: Fill in here in the form "bearer <tokenstring>"
-    var msGraph = MsGraph(replacewithtoken);
-      var me = await msGraph.me.get(); //get me
-      
-      _setResult(String.fromCharCodes(me));
+    if (currentToken == "") {
+      showMessage("Please log in.");
+      return;
+    }
+    var msGraph = MsGraph(currentToken);
+    var me = await msGraph.me.get(); //get me
+
+    _setResult(String.fromCharCodes(me));
+  }
+
+  void showError(dynamic ex) {
+    showMessage(ex.toString());
+  }
+
+  void showMessage(String text) {
+    var alert = new AlertDialog(content: new Text(text), actions: <Widget>[
+      new FlatButton(
+          child: const Text("Ok"),
+          onPressed: () {
+            Navigator.pop(context);
+          })
+    ]);
+    showDialog(context: context, builder: (BuildContext context) => alert);
+  }
+
+  void login() async {
+    try {
+      await oauth.login();
+      currentToken = await oauth.getAccessToken();
+      showMessage("Logged in successfully, your access token: $currentToken");
+    } catch (e) {
+      showError(e);
+    }
+  }
+
+  void logout() async {
+    await oauth.logout();
+    showMessage("Logged out");
   }
 
   void _setResult(String result) {
@@ -70,7 +116,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() async {
     await _getMe();
-    
   }
 
   @override
@@ -117,10 +162,21 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: RaisedButton(
-        onPressed: _incrementCounter,
-        
-        child: Text("Get Me from graph"),
+      floatingActionButton: Row(
+        children: [
+          RaisedButton(
+            onPressed: login,
+            child: Text("AAD Sign in"),
+          ),
+          RaisedButton(
+            onPressed: logout,
+            child: Text("AAD Sign out"),
+          ),
+          RaisedButton(
+            onPressed: _incrementCounter,
+            child: Text("Get Me from graph"),
+          ),
+        ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

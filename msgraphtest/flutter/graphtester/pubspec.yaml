@@ -34,8 +34,7 @@ dev_dependencies:
     sdk: flutter
   msgraph:
     git: https://github.com/allanwei/msgraph.git
-  msauth:
-    git: https://github.com/allanwei/msauth.git
+  aad_oauth: "^0.1.9"
 
 
 # For information on the generic Dart part of this file, see the
