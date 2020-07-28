@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:msgraph/msgraph.dart';
 import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
+import 'package:graphtester/msgraph/msgraph.dart';
 
 void main() {
   runApp(MyApp());
@@ -57,26 +57,26 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //Azure AAD
   //This does work
-  static final Config configAzureADMS = new Config(
-    ReplaceWithtenanID, //tenantID
-    ReplaceWithClientID, //client ID
-    "openid profile offline_access user.read people.read", //scope
+  static final Config configAzureOnMS = new Config(
+    tenentId, //tenantID
+    clientId, //client ID
+    "openid profile offline_access user.read people.read people.read.all", //scope
     "https://login.microsoftonline.com/common/oauth2/nativeclient", //callbackURL
   );
 
-  final AadOAuth oauth = new AadOAuth(configAzureADMS);
+  final AadOAuth oauth = new AadOAuth(configAzureOnMS);
   String _counter = "";
 
-  Future _getMe() async {
-    if (currentToken == "") {
-      showMessage("Please log in.");
-      return;
-    }
-    var msGraph = MsGraph(currentToken);
-    var me = await msGraph.me.get(); //get me
+  // Future _getMe() async {
+  //   if (currentToken == "") {
+  //     showMessage("Please log in.");
+  //     return;
+  //   }
+  //   var msGraph = MsGraph(currentToken);
+  //   var me = await msGraph.me.get(); //get me
 
-    _setResult(String.fromCharCodes(me));
-  }
+  //   _setResult(String.fromCharCodes(me));
+  // }
 
   Future _getPeople() async {
     if (currentToken == "") {
@@ -86,7 +86,8 @@ class _MyHomePageState extends State<MyHomePage> {
     var msGraph = MsGraph(currentToken);
     var people = await msGraph.me.getPeople();
 
-    _setResult(people.toString());
+    _setResult(
+        'Got ${people.value.length} from the graph, first name is ${people.value[0].userPrincipalName}');
   }
 
   void showError(dynamic ex) {

@@ -1,41 +1,42 @@
+import 'package:json_annotation/json_annotation.dart';
+
+// Before this file will compile you need to run codegen for the project.
+// in order to run codegen you need to be on the flutter stable branch,
+// then use this command in the root of the project: flutter pub run build_runner build --delete-conflicting-outputs
+// After that person.g.dart will be created and this project will compile
+part 'person.g.dart';
+
+@JsonSerializable()
 class People {
   List<Person> value;
 
   People({this.value});
 
-  factory People.fromJson(Map<String, dynamic> json) {
-    List<Person> valuesList = new List<Person>();
-    if (json['value'] != null) {
-      valuesList = new List<Person>();
-      json['value'].forEach((v) {
-        valuesList.add(new Person.fromJson(v));
-      });
-    }
+  factory People.fromJson(Map<String, dynamic> json) => _$PeopleFromJson(json);
 
-    return People(value: valuesList);
-  }
-
+  Map<String, dynamic> toJson() => _$PeopleToJson(this);
 }
 
+@JsonSerializable()
 class Person {
-  String id;
-  String displayName;
-  String givenName;
-  String surname;
-  String birthday;
-  String personNotes;
-  bool isFavorite;
-  String jobTitle;
-  String companyName;
-  String yomiCompany;
-  String department;
-  String officeLocation;
-  String profession;
-  String userPrincipalName;
-  String imAddress;
-  List<ScoredEmailAddress> scoredEmailAddresses;
-  List<Phone> phones;
-  PersonType personType;
+  final String id;
+  final String displayName;
+  final String givenName;
+  final String surname;
+  final String birthday;
+  final String personNotes;
+  final bool isFavorite;
+  final String jobTitle;
+  final String companyName;
+  final String yomiCompany;
+  final String department;
+  final String officeLocation;
+  final String profession;
+  final String userPrincipalName;
+  final String imAddress;
+  final List<ScoredEmailAddress> scoredEmailAddresses;
+  final List<Phone> phones;
+  final PersonType personType;
 
   Person(
       {this.id,
@@ -57,114 +58,47 @@ class Person {
       this.phones,
       this.personType});
 
-  factory Person.fromJson(Map<String, dynamic> json) {
+  factory Person.fromJson(Map<String, dynamic> json) => _$PersonFromJson(json);
 
-    List<ScoredEmailAddress> scoredEmailAddressesList = new List<ScoredEmailAddress>();
-    if (json['scoredEmailAddresses'] != null) {
-      scoredEmailAddressesList = new List<ScoredEmailAddress>();
-      json['scoredEmailAddresses'].forEach((v) {
-        scoredEmailAddressesList.add(new ScoredEmailAddress.fromJson(v));
-      });
-    }
-
-    List<Phone> phonesList = new List<Phone>();
-    if (json['phones'] != null) {
-      phonesList = new List<Phone>();
-      json['phones'].forEach((v) {
-        phonesList.add(new Phone.fromJson(v));
-      });
-    }
-
-    PersonType personTypeItem;
-    if (json['personType'] != null) {
-      personTypeItem = new PersonType.fromJson(json['personType']);
-    }
-
-    return Person(
-      id: json['id'] as String,
-      displayName: json['displayName'] as String,
-      givenName: json['givenName'] as String,
-      surname: json['surname'] as String,
-      birthday: json['birthday'] as String,
-      personNotes: json['personNotes'] as String,
-      isFavorite: json['isFavorite'] as bool,
-      jobTitle: json['jobTitle'] as String,
-      companyName: json['companyName'] as String,
-      yomiCompany: json['yomiCompany'] as String,
-      department: json['department'] as String,
-      officeLocation: json['officeLocation'] as String,
-      profession: json['profession'] as String,
-      userPrincipalName: json['userPrincipalName'] as String,
-      imAddress: json['imAddress'] as String,
-      scoredEmailAddresses: scoredEmailAddressesList,
-      phones: phonesList,
-      personType: personTypeItem
-    );
-  }
+  Map<String, dynamic> toJson() => _$PersonToJson(this);
 }
 
+@JsonSerializable()
 class ScoredEmailAddress {
   String address;
-  int relevanceScore;
+  double relevanceScore;
   String selectionLikelihood;
 
   ScoredEmailAddress(
       {this.address, this.relevanceScore, this.selectionLikelihood});
 
-  ScoredEmailAddress.fromJson(Map<String, dynamic> json) {
-    address = json['address'];
-    relevanceScore = json['relevanceScore'];
-  }
+  factory ScoredEmailAddress.fromJson(Map<String, dynamic> json) =>
+      _$ScoredEmailAddressFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-
-    data['address'] = this.address;
-    data['relevanceScore'] = this.relevanceScore;
-    data['selectionLikelihood'] = this.selectionLikelihood;
-
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$ScoredEmailAddressToJson(this);
 }
 
+@JsonSerializable()
 class Phone {
   String type;
   String number;
 
   Phone({this.type, this.number});
 
-  Phone.fromJson(Map<String, dynamic> json) {
-    type = json['type'];
-    number = json['number'];
-  }
+  factory Phone.fromJson(Map<String, dynamic> json) => _$PhoneFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-
-    data['type'] = this.type;
-    data['number'] = this.number;
-
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$PhoneToJson(this);
 }
 
+@JsonSerializable()
 class PersonType {
   String classOfPerson;
   String subclass;
 
   PersonType({this.classOfPerson, this.subclass});
 
-  PersonType.fromJson(Map<String, dynamic> json) {
-    classOfPerson = json['class'];
-    subclass = json['subclass'];
-  }
+  factory PersonType.fromJson(Map<String, dynamic> json) =>
+      _$PersonTypeFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-
-    data['class'] = this.classOfPerson;
-    data['subclass'] = this.subclass;
-
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$PersonTypeToJson(this);
 }

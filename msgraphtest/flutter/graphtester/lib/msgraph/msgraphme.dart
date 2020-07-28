@@ -112,9 +112,10 @@ class Me {
         '/people/?\$top=20&filter=personType/class eq \'Person\' and personType/subclass eq \'OrganizationUser\'',
         {'responseType': 'application/json'});
 
-    final parsed = json.decode(response).cast<Map<String, dynamic>>();
+    final peeps =
+        People.fromJson(json.decode(response) as Map<String, dynamic>);
 
-    return People.fromJson(parsed);
+    return peeps;
   }
 
   Future<dynamic> createMessage(Message message) async {

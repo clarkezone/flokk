@@ -143,6 +143,10 @@ class Message extends Equatable {
 
     return data;
   }
+
+  @override
+  // TODO: implement props
+  List<Object> get props => throw UnimplementedError();
 }
 
 class Body extends Equatable {
@@ -162,6 +166,10 @@ class Body extends Equatable {
     data['content'] = this.content;
     return data;
   }
+
+  @override
+  // TODO: implement props
+  List<Object> get props => throw UnimplementedError();
 }
 
 class Flag extends Equatable {
@@ -178,6 +186,10 @@ class Flag extends Equatable {
     data['@odata.type'] = this.odataType;
     return data;
   }
+
+  @override
+  // TODO: implement props
+  List<Object> get props => throw UnimplementedError();
 }
 
 class Attachments {
