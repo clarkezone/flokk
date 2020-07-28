@@ -38,16 +38,16 @@ class SmallContactMicrosoftCard extends StatelessWidget {
               contact?.nameFull ?? "",
               maxLines: 2,
               overflow: TextOverflow.fade,
-              style: TextStyles.H2.textHeight(1.3).textColor(txtColor).bold,
+              style: TextStyles.H2.textHeight(1.2).textColor(txtColor).bold,
               textAlign: TextAlign.center,
-            ).center().height(30),
+            ).center().height(26),
             Text(
               contact?.jobTitle ?? "",
               maxLines: 2,
               overflow: TextOverflow.fade,
-              style: TextStyles.Body2.textHeight(1.3).textColor(theme.greyWeak),
+              style: TextStyles.Body2.textHeight(1.1).textColor(theme.greyWeak),
               textAlign: TextAlign.center,
-            ).center().height(30),
+            ).center().height(24),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -61,7 +61,7 @@ class SmallContactMicrosoftCard extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ]
-            ).height(30),
+            ).height(24),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,

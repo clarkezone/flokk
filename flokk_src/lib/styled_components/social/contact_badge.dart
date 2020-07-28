@@ -1,5 +1,4 @@
 import 'package:flokk/app_extensions.dart';
-import 'package:flokk/styled_components/buttons/transparent_btn.dart';
 import 'package:flokk/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,16 +17,16 @@ class ContactBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     AppTheme theme = context.watch();
     double size = 22;
-    return TransparentBtn(
-      onPressed: onPressed,
-      child: Stack(
-        children: [
-          /// PLACEHOLDER
-          if (!hasAccount) Icon(iconPlaceholder, size: 22, color: theme.greyWeak.withOpacity(.7)).center(),
-          /// VALID ACCOUNT
-          if (hasAccount) Icon(icon, size: 22, color: theme.grey),
-        ],
-      ).width(size).height(size),
-    );
+    var accountIcon = hasAccount
+        ? Icon(icon, size: size, color: theme.grey)
+        : Icon(iconPlaceholder, size: size, color: theme.greyWeak.withOpacity(.7)).center();
+    return
+      RawMaterialButton(
+        onPressed: onPressed,
+        elevation: 0,
+        fillColor: Color(0xffeeeeee),
+        child: accountIcon,
+        shape: CircleBorder(),
+      ).width(size * 1.8).height(size * 1.8);
   }
 }
