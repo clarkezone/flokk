@@ -32,17 +32,17 @@ class SmallContactMicrosoftCard extends StatelessWidget {
         width: cardWidth - Insets.m * 2,
         child: Column(
           children: [
-            StyledUserAvatar(contact: contact, size: 60),
+            StyledUserAvatar(contact: contact, size: 60, useInitials: true,),
             VSpace(Insets.xs),
             Text(
-              "Some very long person's name", //contact?.nameFull ?? "",
+              contact?.nameFull ?? "",
               maxLines: 2,
               overflow: TextOverflow.fade,
               style: TextStyles.H2.textHeight(1.3).textColor(txtColor).bold,
               textAlign: TextAlign.center,
             ).center().height(30),
             Text(
-              "Marketing Assistant or another job title", //contact?.jobTitle ?? "",
+              contact?.jobTitle ?? "",
               maxLines: 2,
               overflow: TextOverflow.fade,
               style: TextStyles.Body2.textHeight(1.3).textColor(theme.greyWeak),
@@ -54,7 +54,7 @@ class SmallContactMicrosoftCard extends StatelessWidget {
                 Icon(Icons.location_on, size: 20, color: txtColor),
                 HSpace(Insets.xs),
                 Text(
-                  "13/203", //contact?.officeLocation ?? "",
+                  "Unknown", //contact?.officeLocation ?? "",
                   maxLines: 1,
                   overflow: TextOverflow.fade,
                   style: TextStyles.Body2.textHeight(1.3).textColor(txtColor),
