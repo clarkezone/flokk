@@ -23,7 +23,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  shared_preferences: ^0.5.2
 
+dependency_overrides:
+  shared_preferences:
+    git:
+      url: git://github.com/franciscojma86/plugins.git
+      path: packages/shared_preferences/shared_preferences
+      ref: 4ae292668479de7bf8122fb60bd5a0fa37840909
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
