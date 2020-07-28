@@ -78,6 +78,17 @@ class _MyHomePageState extends State<MyHomePage> {
     _setResult(String.fromCharCodes(me));
   }
 
+  Future _getPeople() async {
+    if (currentToken == "") {
+      showMessage("Please log in.");
+      return;
+    }
+    var msGraph = MsGraph(currentToken);
+    var people = await msGraph.me.getPeople();
+
+    _setResult(people.toString());
+  }
+
   void showError(dynamic ex) {
     showMessage(ex.toString());
   }
@@ -115,7 +126,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _incrementCounter() async {
-    await _getMe();
+    await _getPeople();
+    //await _getMe();
   }
 
   @override
