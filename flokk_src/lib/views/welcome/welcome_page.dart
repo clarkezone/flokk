@@ -126,6 +126,7 @@ class WelcomePageState extends State<WelcomePage> {
     /// Load initial contacts
     isLoading = true;
     await RefreshMSContactsCommand(context).execute();
+    // build array of emails
     await RefreshContactsCommand(context).execute();
     await RefreshSocialCommand(context)
         .execute(context.read<ContactsModel>().allContacts);

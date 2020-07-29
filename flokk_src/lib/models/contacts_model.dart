@@ -7,7 +7,14 @@ import 'package:flokk/models/abstract_model.dart';
 import 'package:flokk/models/github_model.dart';
 import 'package:flokk/models/twitter_model.dart';
 import 'package:flokk/services/google_rest/google_rest_service.dart';
+import 'package:flokk/services/msgraph/models/calender_event.dart';
+import 'package:flokk/services/msgraph/models/email.dart';
+import 'package:flokk/services/msgraph/models/shared_files.dart';
 import 'package:tuple/tuple.dart';
+
+import 'msgraph_calendar_model.dart';
+import 'msgraph_emails_model.dart';
+import 'msgraph_sharedfiles_model.dart';
 
 class ContactsModel extends AbstractModel {
   final DateTime epoch = DateTime.fromMillisecondsSinceEpoch(0);
@@ -16,7 +23,8 @@ class ContactsModel extends AbstractModel {
   final tweetsCooldown = Duration(minutes: 1);
   final contactGroupsCooldown = Duration(seconds: 20);
 
-  DateTime lastUpdatedGroups = DateTime.fromMillisecondsSinceEpoch(0); //can't just use epoch because "only static members can be used in initializers"
+  DateTime lastUpdatedGroups = DateTime.fromMillisecondsSinceEpoch(
+      0); //can't just use epoch because "only static members can be used in initializers"
 
   ContactsModel() {
     enableSerialization("contacts.dat");
@@ -24,6 +32,9 @@ class ContactsModel extends AbstractModel {
 
   TwitterModel twitterModel;
   GithubModel gitModel;
+  MSGraphCalendarModel msgraphCalendarModel;
+  MSEmailModel msgraphEmailModel;
+  MSSharedFilesModel msgraphSharedFilesModel;
 
   //Groups
   List<GroupData> get allGroups => _allGroups ?? [];
@@ -35,14 +46,27 @@ class ContactsModel extends AbstractModel {
     notifyListeners();
   }
 
-  GroupData getGroupById(String value) => _allGroups.firstWhere((g) => g.id == value, orElse: () => null);
+  GroupData getGroupById(String value) =>
+      _allGroups.firstWhere((g) => g.id == value, orElse: () => null);
 
-  GroupData getGroupByName(String value) => _allGroups.firstWhere((g) => g.name == value, orElse: () => null);
+  GroupData getGroupByName(String value) =>
+      _allGroups.firstWhere((g) => g.name == value, orElse: () => null);
+
+  //Calendar
+  List<CalendarEvent> get calendarEvents => msgraphCalendarModel.events.value;
+
+  //Email
+  List<Email> get emails => msgraphEmailModel.eMails;
+
+  //Shared files
+  List<SharedFile> get shaerdFiles => msgraphSharedFilesModel.theSharedFiles;
 
   //Contacts List
-  List<ContactData> get activeContacts => allContacts.where((c) => !c.isDeleted).toList();
+  List<ContactData> get activeContacts =>
+      allContacts.where((c) => !c.isDeleted).toList();
 
-  List<ContactData> get starred => allContacts.where((c) => c.isStarred).toList();
+  List<ContactData> get starred =>
+      allContacts.where((c) => c.isStarred).toList();
 
   List<ContactData> get allContacts => _allContacts;
   List<ContactData> _allContacts = [];
@@ -53,7 +77,8 @@ class ContactsModel extends AbstractModel {
     notifyListeners();
   }
 
-  ContactData getContactById(String id) => _allContacts.firstWhere((c) => c.id == id, orElse: () => null);
+  ContactData getContactById(String id) =>
+      _allContacts.firstWhere((c) => c.id == id, orElse: () => null);
 
   void addContact(ContactData contact) {
     _allContacts.add(contact);
@@ -116,21 +141,26 @@ class ContactsModel extends AbstractModel {
   }
 
   bool canRefreshGitEventsFor(String gitUsername) {
-    DateTime lastUpdate = getSocialContactByGit(gitUsername)?.lastUpdatedGit ?? epoch;
+    DateTime lastUpdate =
+        getSocialContactByGit(gitUsername)?.lastUpdatedGit ?? epoch;
     return DateTime.now().difference(lastUpdate) > gitEventsCooldown;
   }
 
   bool canRefreshTweetsFor(String twitterHandle) {
-    DateTime lastUpdate = getSocialContactByTwitter(twitterHandle)?.lastUpdatedTwitter ?? epoch;
+    DateTime lastUpdate =
+        getSocialContactByTwitter(twitterHandle)?.lastUpdatedTwitter ?? epoch;
     return DateTime.now().difference(lastUpdate) > tweetsCooldown;
   }
 
-  bool get canRefreshContactGroups => DateTime.now().difference(lastUpdatedGroups ?? epoch) > contactGroupsCooldown;
+  bool get canRefreshContactGroups =>
+      DateTime.now().difference(lastUpdatedGroups ?? epoch) >
+      contactGroupsCooldown;
 
   //Updates the timestamps when social feeds are refreshed for contact
   void updateSocialTimestamps({String twitterHandle, String gitUsername}) {
     if (!StringUtils.isEmpty(twitterHandle)) {
-      getSocialContactByTwitter(twitterHandle)?.lastUpdatedTwitter = DateTime.now();
+      getSocialContactByTwitter(twitterHandle)?.lastUpdatedTwitter =
+          DateTime.now();
     }
     if (!StringUtils.isEmpty(gitUsername)) {
       getSocialContactByGit(gitUsername)?.lastUpdatedGit = DateTime.now();
@@ -138,20 +168,26 @@ class ContactsModel extends AbstractModel {
   }
 
   void updateContactDataGithubValidity(String gitUsername, bool isValid) {
-    allContacts?.firstWhere((x) => x.gitUsername == gitUsername, orElse: () => null)?.hasValidGit = isValid;
+    allContacts
+        ?.firstWhere((x) => x.gitUsername == gitUsername, orElse: () => null)
+        ?.hasValidGit = isValid;
   }
 
   void updateContactDataTwitterValidity(String twitterHandle, bool isValid) {
-    allContacts?.firstWhere((x) => x.twitterHandle == twitterHandle, orElse: () => null)?.hasValidTwitter = isValid;
+    allContacts
+        ?.firstWhere((x) => x.twitterHandle == twitterHandle,
+            orElse: () => null)
+        ?.hasValidTwitter = isValid;
   }
 
-  ContactData getContactByGit(String gitUsername) =>
-      allContacts?.firstWhere((x) => x.gitUsername == gitUsername, orElse: () => null);
+  ContactData getContactByGit(String gitUsername) => allContacts
+      ?.firstWhere((x) => x.gitUsername == gitUsername, orElse: () => null);
 
-  ContactData getContactByTwitter(String twitterHandle) =>
-      allContacts?.firstWhere((x) => x.twitterHandle == twitterHandle, orElse: () => null);
+  ContactData getContactByTwitter(String twitterHandle) => allContacts
+      ?.firstWhere((x) => x.twitterHandle == twitterHandle, orElse: () => null);
 
-  SocialContactData getSocialContactByGit(String gitUsername) => getSocialById(getContactByGit(gitUsername)?.id);
+  SocialContactData getSocialContactByGit(String gitUsername) =>
+      getSocialById(getContactByGit(gitUsername)?.id);
 
   SocialContactData getSocialContactByTwitter(String twitterHandle) =>
       getSocialById(getContactByTwitter(twitterHandle)?.id);
@@ -162,29 +198,37 @@ class ContactsModel extends AbstractModel {
 
   //Get a list of contacts with the most recent activity
   List<SocialContactData> get mostRecentSocialContacts => allSocialContacts
-    ..sort((a, b) => (b.latestActivity?.createdAt ?? epoch).compareTo(a.latestActivity?.createdAt ?? epoch));
+    ..sort((a, b) => (b.latestActivity?.createdAt ?? epoch)
+        .compareTo(a.latestActivity?.createdAt ?? epoch));
 
   SocialContactData getSocialById(String id) {
     if (StringUtils.isEmpty(id)) return null;
-    return allSocialContacts?.firstWhere((c) => c.contactId == id, orElse: () => null);
+    return allSocialContacts?.firstWhere((c) => c.contactId == id,
+        orElse: () => null);
   }
 
   //Get a list of contacts with upcoming dates (repeated contacts are expected if they have multiple events that are upcoming)
   List<Tuple2<ContactData, DateMixin>> get upcomingDateContacts {
     //List of all dates (birthday and events) with their contact id
     List<Tuple2<String, DateMixin>> flattenedDates = allContacts
-        .map((contact) => contact.allDates.map((x) => Tuple2<String, DateMixin>(contact.id, x)).toList())
+        .map((contact) => contact.allDates
+            .map((x) => Tuple2<String, DateMixin>(contact.id, x))
+            .toList())
         .toList()
         .expand((element) => element)
-        .where((element) => element.item2.daysTilAnniversary < 90) //limit to upcoming dates for next 3 months
+        .where((element) =>
+            element.item2.daysTilAnniversary <
+            90) //limit to upcoming dates for next 3 months
         .toList();
 
     //Sort by the closest upcoming dates
-    flattenedDates.sort((a, b) => a.item2.daysTilAnniversary.compareTo(b.item2.daysTilAnniversary));
+    flattenedDates.sort((a, b) =>
+        a.item2.daysTilAnniversary.compareTo(b.item2.daysTilAnniversary));
 
     List<Tuple2<ContactData, DateMixin>> contactsWithDates = [];
     for (var n in flattenedDates) {
-      contactsWithDates.add(Tuple2<ContactData, DateMixin>(getContactById(n.item1), n.item2));
+      contactsWithDates.add(
+          Tuple2<ContactData, DateMixin>(getContactById(n.item1), n.item2));
     }
     return contactsWithDates;
   }
@@ -217,7 +261,8 @@ class ContactsModel extends AbstractModel {
 
   void _updateSocialContacts() {
     //clean up any social contacts that are NOT found in all contacts
-    _allSocialContacts.removeWhere((x) => !_allContacts.any((c) => c.id == x.contactId));
+    _allSocialContacts
+        .removeWhere((x) => !_allContacts.any((c) => c.id == x.contactId));
 
     //create social contact if needed, otherwise just update tweets/events
     for (var n in _allContacts) {
@@ -229,7 +274,8 @@ class ContactsModel extends AbstractModel {
             ..gitEvents = gitModel.getEventsByContact(n)
             ..tweets = twitterModel.getTweetsByContact(n));
         } else {
-          SocialContactData socialContact = _allSocialContacts.firstWhere((x) => x.contactId == n.id);
+          SocialContactData socialContact =
+              _allSocialContacts.firstWhere((x) => x.contactId == n.id);
           socialContact.contact = n;
           socialContact.gitEvents = gitModel.getEventsByContact(n);
           socialContact.tweets = twitterModel.getTweetsByContact(n);
@@ -251,15 +297,23 @@ class ContactsModel extends AbstractModel {
   //Json Serialization
   @override
   ContactsModel copyFromJson(Map<String, dynamic> value) {
-    _allContacts = toList(value['_allContacts'], (j) => ContactData.fromJson(j)) ?? [];
-    _allGroups = toList(value['_allGroups'], (j) => GroupData.fromJson(j)) ?? [];
-    _allSocialContacts = toList(value['_allSocialContacts'], (j) => SocialContactData.fromJson(j)) ?? [];
+    _allContacts =
+        toList(value['_allContacts'], (j) => ContactData.fromJson(j)) ?? [];
+    _allGroups =
+        toList(value['_allGroups'], (j) => GroupData.fromJson(j)) ?? [];
+    _allSocialContacts = toList(value['_allSocialContacts'],
+            (j) => SocialContactData.fromJson(j)) ??
+        [];
     _updateSocialContacts();
     return this;
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {'_allContacts': _allContacts, '_allGroups': _allGroups, '_allSocialContacts': _allSocialContacts};
+    return {
+      '_allContacts': _allContacts,
+      '_allGroups': _allGroups,
+      '_allSocialContacts': _allSocialContacts
+    };
   }
 }

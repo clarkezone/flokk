@@ -58,6 +58,9 @@ void main() {
 
   contactsModel.twitterModel = twitterModel;
   contactsModel.gitModel = githubModel;
+  contactsModel.msgraphCalendarModel = graphCalendarModel;
+  contactsModel.msgraphEmailModel = graphEmailModel;
+  contactsModel.msgraphSharedFilesModel = graphFilesModel;
 
   /// Run MainApp, and provide all Models and Services
   runApp(
