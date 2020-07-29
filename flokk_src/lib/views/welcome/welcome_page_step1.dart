@@ -1,4 +1,5 @@
 import 'package:flokk/_internal/components/seperated_flexibles.dart';
+import 'package:flokk/_internal/components/spacing.dart';
 import 'package:flokk/app_extensions.dart';
 import 'package:flokk/styled_components/buttons/primary_btn.dart';
 import 'package:flokk/styled_components/flokk_logo.dart';
@@ -18,6 +19,7 @@ class WelcomePageStep1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WelcomePageState state = context.watch();
+    TextStyle normalTxtStyle = TextStyles.Body1.textColor(Color(0xfff1f7f0));
     TextStyle bodyTxtStyle =
         TextStyles.Body1.textColor(Color(0xfff1f7f0)).textHeight(1.6);
     return SeparatedColumn(
@@ -56,19 +58,22 @@ class WelcomePageStep1 extends StatelessWidget {
                 .gestures(onTap: state.handleStartPressed)
             : Column(
                 children: [
+                  VSpace(Insets.l),
                   PrimaryTextBtn(
                     "Sign in with Microsoft",
                     onPressed: state.handleMSFTPressed,
-                  ).padding(top: Insets.m).width(239),
+                  ).width(239),
+                  VSpace(Insets.m),
                   Text(
                     "or",
-                    style: bodyTxtStyle,
+                    style: normalTxtStyle,
                     textAlign: TextAlign.center,
                   ),
+                  VSpace(Insets.m),
                   PrimaryTextBtn(
                     "Sign in with Google",
                     onPressed: state.handleStartPressed,
-                  ).padding(top: Insets.m).width(239),
+                  ).width(239),
                 ],
               ),
       ],
