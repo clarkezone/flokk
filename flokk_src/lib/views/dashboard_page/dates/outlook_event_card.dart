@@ -41,7 +41,7 @@ class OutlookEventCard extends StatelessWidget {
           children: [
             Column(
               children: [
-                VSpace(Insets.sm),
+                VSpace(Insets.xs),
                 Flexible(
                   child: Row(
                     children: [
@@ -69,9 +69,9 @@ class OutlookEventCard extends StatelessWidget {
                       "Featured Talk: Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor",
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
-                      style: TextStyles.Body1.textHeight(1.6)
+                      style: TextStyles.Body1.textHeight(1.4)
                           .textColor(theme.txt)),
-                  VSpace(Insets.m),
+                  VSpace(Insets.sm),
                   Row(
                     children: [
                       Icon(

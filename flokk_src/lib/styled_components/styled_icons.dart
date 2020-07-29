@@ -121,4 +121,10 @@ class StyledIcons {
 
   static AssetImage get fileActive =>
       AssetImage("assets/icons/icon-file-active.png");
+
+  static AssetImage get ppt => AssetImage("assets/icons/icon-ppt.png");
+
+  static AssetImage get word => AssetImage("assets/icons/icon-word.png");
+
+  static AssetImage get excel => AssetImage("assets/icons/icon-excel.png");
 }

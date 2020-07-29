@@ -15,6 +15,7 @@ import 'package:flokk/themes.dart';
 import 'package:flokk/views/dashboard_page/social/responsive_double_list.dart';
 import 'package:flokk/views/empty_states/placeholder_git.dart';
 import 'package:flokk/views/empty_states/placeholder_twitter.dart';
+import 'package:flokk/views/productivity/onedrive-file-card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -97,7 +98,7 @@ class _SocialActivitySectionState extends State<SocialActivitySection> {
               icon1 = StyledIcons.mailActive;
               list2Title = "FILES SHARED";
               list2 = gitModel.allEvents
-                  .map((event) => GitEventListItem(event))
+                  .map((event) => OneDriveFileCard(event))
                   .take(maxItems)
                   .toList();
               list2Placeholder = GitPlaceholder();
@@ -128,7 +129,7 @@ class _SocialActivitySectionState extends State<SocialActivitySection> {
               list1Title = "FILES SHARED";
               list1Placeholder = GitPlaceholder();
               list1 = gitModel.allEvents
-                  .map((event) => GitEventListItem(event))
+                  .map((event) => OneDriveFileCard(event))
                   .take(maxItems)
                   .toList();
               icon1 = StyledIcons.fileActive;
@@ -269,11 +270,10 @@ class _SocialActivitySectionState extends State<SocialActivitySection> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 OneLineText(
-                        AppGlobals.contactStoreType ==
-                                ContactStoreType.Microsoft
-                            ? "RECENT ACTIVITIES"
-                            : "SOCIAL ACTIVITIES",
-                        style: headerStyle.textColor(theme.accent1Darker)),
+                    AppGlobals.contactStoreType == ContactStoreType.Microsoft
+                        ? "RECENT ACTIVITIES"
+                        : "SOCIAL ACTIVITIES",
+                    style: headerStyle.textColor(theme.accent1Darker)),
                 Spacer(),
                 OneLineText(
                   sections[tabIndex].toUpperCase(),
