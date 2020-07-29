@@ -11,6 +11,7 @@ import 'package:flokk/styled_components/styled_tab_bar.dart';
 import 'package:flokk/styles.dart';
 import 'package:flokk/themes.dart';
 import 'package:flokk/views/dashboard_page/top/small_contact_card.dart';
+import 'package:flokk/views/dashboard_page/top/small_contact_microsoft_card.dart';
 import 'package:flokk/views/empty_states/placeholder_content_switcher.dart';
 import 'package:flokk/views/empty_states/placeholder_top_contacts.dart';
 import 'package:flutter/material.dart';
@@ -94,7 +95,7 @@ class _ContactCardList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     /// Create list of item renderers
-    List<Widget> contactCards = contacts.map((c) => SmallContactCard(c)).toList();
+    List<Widget> contactCards = contacts.map((c) => SmallContactMicrosoftCard(c)).toList();
 
     /// Layout content
     EdgeInsets padding = EdgeInsets.symmetric(horizontal: Insets.l, vertical: Insets.m);
@@ -110,7 +111,7 @@ class _ContactCardList extends StatelessWidget {
           padding: EdgeInsets.only(left: Insets.l),
           scrollbarPadding: EdgeInsets.only(left: Insets.m, right: Insets.sm),
           barSize: UniversalPlatformExt.isMobile ? 3 : 6,
-          itemBuilder: (_, index) => SmallContactCard(contacts[index]),
+          itemBuilder: (_, index) => SmallContactMicrosoftCard(contacts[index]),
           //itemExtent: itemSize,
         ));
   }

@@ -54,7 +54,7 @@ class UpcomingActivitiesSection extends StatelessWidget {
                 child: SimpleGrid(
                   kidHeight:
                       AppGlobals.contactStoreType == ContactStoreType.Microsoft
-                          ? 140
+                          ? 132
                           : 54,
                   kids: kids,
                   colCount: colCount,
