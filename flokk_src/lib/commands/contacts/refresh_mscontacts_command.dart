@@ -46,7 +46,7 @@ class RefreshMSContactsCommand extends AbstractCommand
         contactsModel.scheduleSave();
       }
 
-      Log.p("MSGraph People  loaded = ${result.content.value.length ?? 0}");
+      Log.p("MSGraph People  loaded = ${result.content.value?.length ?? 0}");
       return result.response;
     });
     return result;

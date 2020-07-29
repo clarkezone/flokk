@@ -11,15 +11,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SmallContactMicrosoftCard extends StatelessWidget {
-
   static const double cardWidth = 162;
 
   final ContactData contact;
 
   const SmallContactMicrosoftCard(this.contact, {Key key}) : super(key: key);
 
-  void _handleCardPressed(BuildContext c) =>
-      c.read<MainScaffoldState>().trySetSelectedContact(contact, showSocial: false);
+  void _handleCardPressed(BuildContext c) => c
+      .read<MainScaffoldState>()
+      .trySetSelectedContact(contact, showSocial: false);
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +31,9 @@ class SmallContactMicrosoftCard extends StatelessWidget {
         margin: EdgeInsets.all(Insets.m),
         width: cardWidth - Insets.m * 2,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            StyledUserAvatar(contact: contact, size: 60, useInitials: true,),
+            StyledUserAvatar(contact: contact, size: 48, useInitials: true),
             VSpace(Insets.xs),
             Text(
               contact?.nameFull ?? "",
@@ -40,28 +41,27 @@ class SmallContactMicrosoftCard extends StatelessWidget {
               overflow: TextOverflow.fade,
               style: TextStyles.H2.textHeight(1.2).textColor(txtColor).bold,
               textAlign: TextAlign.center,
-            ).center().height(26),
+            ),
+            VSpace(Insets.xs),
             Text(
               contact?.jobTitle ?? "",
               maxLines: 2,
               overflow: TextOverflow.fade,
-              style: TextStyles.Body2.textHeight(1.1).textColor(theme.greyWeak),
+              style: TextStyles.Body2.textHeight(1.2).textColor(theme.greyWeak),
               textAlign: TextAlign.center,
-            ).center().height(24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Icon(Icons.location_on, size: 20, color: txtColor),
-                HSpace(Insets.xs),
-                Text(
-                  "Unknown", //contact?.officeLocation ?? "",
-                  maxLines: 1,
-                  overflow: TextOverflow.fade,
-                  style: TextStyles.Body2.textHeight(1.3).textColor(txtColor),
-                  textAlign: TextAlign.center,
-                ),
-              ]
-            ).height(24),
+            ),
+            // Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            //   Icon(Icons.location_on, size: 14, color: txtColor),
+            //   HSpace(Insets.xs),
+            //   Text(
+            //     "Unknown", //contact?.officeLocation ?? "",
+            //     maxLines: 1,
+            //     overflow: TextOverflow.fade,
+            //     style: TextStyles.Body2.textHeight(1.3).textColor(txtColor),
+            //     textAlign: TextAlign.center,
+            //   ),
+            // ]).opacity(0.4),
+            VSpace(Insets.m),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
@@ -79,7 +79,6 @@ class SmallContactMicrosoftCard extends StatelessWidget {
                   hasAccount: contact.hasPhone,
                   onPressed: () {},
                 ),
-
               ],
             ),
           ],

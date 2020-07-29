@@ -11,7 +11,9 @@ class StyledUserAvatar extends StatefulWidget {
   final double size;
   final bool useInitials;
 
-  const StyledUserAvatar({Key key, this.contact, this.size, this.useInitials = false}) : super(key: key);
+  const StyledUserAvatar(
+      {Key key, this.contact, this.size, this.useInitials = false})
+      : super(key: key);
 
   @override
   _StyledUserAvatarState createState() => _StyledUserAvatarState();
@@ -36,13 +38,15 @@ class _StyledUserAvatarState extends State<StyledUserAvatar> {
 
   @override
   Widget build(BuildContext context) {
-
     Widget child;
     if (widget.contact.profilePicBytes != null) {
       child = Image.memory(widget.contact.profilePicBytes, fit: BoxFit.cover);
-    } else if (widget.contact.profilePic != null && !widget.contact.isDefaultPic) {
+    } else if (widget.contact.profilePic != null &&
+        !widget.contact.isDefaultPic) {
       child = Image.network(widget.contact.profilePic, fit: BoxFit.cover);
-    } else if (widget.useInitials && StringUtils.isNotEmpty("$widget.contact?.nameGiven$widget.contact?.nameFamily")) {
+    } else if (widget.useInitials &&
+        StringUtils.isNotEmpty(
+            "$widget.contact?.nameGiven$widget.contact?.nameFamily")) {
       child = InitialsAvatar(
         seed: _seed,
         contact: widget.contact,
@@ -102,7 +106,8 @@ class AnimalAvatar extends StatelessWidget {
         Container(
           color: backgrounds[r.nextInt(backgrounds.length)],
         ),
-        Image.asset("assets/images/birds/${foregrounds[r.nextInt(foregrounds.length)]}.png"),
+        Image.asset(
+            "assets/images/birds/${foregrounds[r.nextInt(foregrounds.length)]}.png"),
       ],
     );
   }
@@ -112,7 +117,8 @@ class InitialsAvatar extends AnimalAvatar {
   final ContactData contact;
   final double size;
 
-  InitialsAvatar({Key key, int seed, this.contact, this.size}) : super(key: key, seed: seed);
+  InitialsAvatar({Key key, int seed, this.contact, this.size})
+      : super(key: key, seed: seed);
 
   @override
   Widget build(BuildContext context) {
@@ -124,11 +130,12 @@ class InitialsAvatar extends AnimalAvatar {
         .join('');
     return CircleAvatar(
       backgroundColor: backgrounds[r.nextInt(backgrounds.length)],
-      foregroundColor: theme.accent1Darker,
-      child: Text(initials, style: TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.w900,
-      )),
+      foregroundColor: Colors.white,
+      child: Text(initials,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w900,
+          )),
       minRadius: size,
       maxRadius: size,
     );
