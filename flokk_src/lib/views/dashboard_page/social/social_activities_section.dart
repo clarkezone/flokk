@@ -16,6 +16,7 @@ import 'package:flokk/views/dashboard_page/social/responsive_double_list.dart';
 import 'package:flokk/views/empty_states/placeholder_git.dart';
 import 'package:flokk/views/empty_states/placeholder_twitter.dart';
 import 'package:flokk/views/productivity/onedrive-file-card.dart';
+import 'package:flokk/views/productivity/outlook-mail-card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -91,7 +92,7 @@ class _SocialActivitySectionState extends State<SocialActivitySection> {
             case ContactStoreType.Microsoft:
               list1Title = "EMAILS FROM LAST WEEK";
               list1 = twitterModel.allTweets
-                  .map((tweet) => TweetListItem(tweet))
+                  .map((tweet) => OutlookMailCard(tweet))
                   .take(maxItems)
                   .toList();
               list1Placeholder = TwitterPlaceholder();
