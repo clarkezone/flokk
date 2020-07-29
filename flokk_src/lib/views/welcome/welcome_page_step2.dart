@@ -31,114 +31,126 @@ class _WelcomePageStep2State extends State<WelcomePageStep2> {
 
     return state.isLoading
         ? StyledProgressSpinner()
-        : Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text("Authorization",
-                  style: headerTxtStyle, textAlign: TextAlign.center),
-              VSpace(Insets.l * 2),
+        : Stack(
+            children: [
+              ColorShiftIconBtn(StyledIcons.previous,
+                  size: 16,
+                  color: Colors.white,
+                  onPressed: state.handleBackPressed),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text("Authorization",
+                      style: headerTxtStyle, textAlign: TextAlign.center),
+                  VSpace(Insets.l * 2),
 
-              /// ////////////////////////////////////////////////
-              /// STEP 1
-              Text("STEP 1", style: titleTxtStyle, textAlign: TextAlign.center),
-              Text(
-                "Copy the following code to your clipboard by clicking the icon or selecting the text.",
-                style: bodyTxtStyle,
-                textAlign: TextAlign.center,
-              ),
-
-              /// DEVICE CODE BOX
-              StyledOutlinedBox(
-                child: state.isLoading
-                    ? StyledProgressSpinner()
-                    : Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          SelectableText("${state.authCode}",
-                                  style: bodyTxtStyle.size(16))
-                              .center(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              ColorShiftIconBtn(StyledIcons.refresh,
-                                  size: 28,
-                                  color: Colors.white,
-                                  onPressed: state.handleRefreshPressed),
-                              ColorShiftIconBtn(StyledIcons.copy,
-                                  size: 24,
-                                  color: Colors.white,
-                                  onPressed: state.handleCodeClicked),
-                            ],
-                          ).padding(horizontal: Insets.m),
-                        ],
-                      ),
-              ).padding(vertical: Insets.l),
-              VSpace(Insets.m),
-
-              /// ////////////////////////////////////////////////
-              /// STEP 2
-              Text("STEP 2", style: titleTxtStyle, textAlign: TextAlign.center),
-              Text(
-                "Navigate to the following link and enter the code you’ve copied.\nFollow the provided instructions to authorize this application.",
-                style: bodyTxtStyle,
-                textAlign: TextAlign.center,
-              ),
-
-              /// DEVICE URL BOX
-              StyledOutlinedBox(
-                child: state.isLoading
-                    ? StyledProgressSpinner()
-                    : Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          SelectableText("${state.authUrl}",
-                                  style: bodyTxtStyle.size(16))
-                              .center(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              ColorShiftIconBtn(StyledIcons.linkout,
-                                  size: 24,
-                                  color: Colors.white,
-                                  onPressed: state.handleUrlClicked),
-                            ],
-                          ).padding(horizontal: Insets.m),
-                        ],
-                      ),
-              ).padding(vertical: Insets.l),
-              VSpace(Insets.m),
-
-              /// ////////////////////////////////////////////////
-              /// STEP 3
-              Text("STEP 3", style: titleTxtStyle, textAlign: TextAlign.center),
-              Text(
-                "Press the button below when you have completed the process.",
-                style: bodyTxtStyle,
-                textAlign: TextAlign.center,
-              ),
-              VSpace(Insets.m),
-              PrimaryTextBtn(
-                "CONTINUE",
-                bigMode: true,
-                onPressed: state.handleCompletePressed,
-              ).padding(top: Insets.m).width(215),
-              VSpace(Insets.l),
-              if (state.authCodeError || state.httpError)
-                Text(
-                  "Error: ${getCurrentErrorCode(state)}",
-                  textAlign: TextAlign.center,
-                  style: TextStyles.T1.bold.textColor(
-                    theme.error,
+                  /// ////////////////////////////////////////////////
+                  /// STEP 1
+                  Text("STEP 1",
+                      style: titleTxtStyle, textAlign: TextAlign.center),
+                  Text(
+                    "Copy the following code to your clipboard by clicking the icon or selecting the text.",
+                    style: bodyTxtStyle,
+                    textAlign: TextAlign.center,
                   ),
-                ).padding(all: Insets.m).decorated(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(Corners.s5),
-                    ),
+
+                  /// DEVICE CODE BOX
+                  StyledOutlinedBox(
+                    child: state.isLoading
+                        ? StyledProgressSpinner()
+                        : Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              SelectableText("${state.authCode}",
+                                      style: bodyTxtStyle.size(16))
+                                  .center(),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  ColorShiftIconBtn(StyledIcons.refresh,
+                                      size: 28,
+                                      color: Colors.white,
+                                      onPressed: state.handleRefreshPressed),
+                                  ColorShiftIconBtn(StyledIcons.copy,
+                                      size: 24,
+                                      color: Colors.white,
+                                      onPressed: state.handleCodeClicked),
+                                ],
+                              ).padding(horizontal: Insets.m),
+                            ],
+                          ),
+                  ).padding(vertical: Insets.l),
+                  VSpace(Insets.m),
+
+                  /// ////////////////////////////////////////////////
+                  /// STEP 2
+                  Text("STEP 2",
+                      style: titleTxtStyle, textAlign: TextAlign.center),
+                  Text(
+                    "Navigate to the following link and enter the code you’ve copied.\nFollow the provided instructions to authorize this application.",
+                    style: bodyTxtStyle,
+                    textAlign: TextAlign.center,
+                  ),
+
+                  /// DEVICE URL BOX
+                  StyledOutlinedBox(
+                    child: state.isLoading
+                        ? StyledProgressSpinner()
+                        : Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              SelectableText("${state.authUrl}",
+                                      style: bodyTxtStyle.size(16))
+                                  .center(),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  ColorShiftIconBtn(StyledIcons.linkout,
+                                      size: 24,
+                                      color: Colors.white,
+                                      onPressed: state.handleUrlClicked),
+                                ],
+                              ).padding(horizontal: Insets.m),
+                            ],
+                          ),
+                  ).padding(vertical: Insets.l),
+                  VSpace(Insets.m),
+
+                  /// ////////////////////////////////////////////////
+                  /// STEP 3
+                  Text("STEP 3",
+                      style: titleTxtStyle, textAlign: TextAlign.center),
+                  Text(
+                    "Press the button below when you have completed the process.",
+                    style: bodyTxtStyle,
+                    textAlign: TextAlign.center,
+                  ),
+                  VSpace(Insets.m),
+                  PrimaryTextBtn(
+                    "CONTINUE",
+                    bigMode: true,
+                    onPressed: state.handleCompletePressed,
+                  ).padding(top: Insets.m).width(215),
+                  VSpace(Insets.l),
+                  if (state.authCodeError || state.httpError)
+                    Text(
+                      "Error: ${getCurrentErrorCode(state)}",
+                      textAlign: TextAlign.center,
+                      style: TextStyles.T1.bold.textColor(
+                        theme.error,
+                      ),
+                    ).padding(all: Insets.m).decorated(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(Corners.s5),
+                        ),
+                ],
+              ).constrained(
+                  maxWidth: state.isDuoSpanned
+                      ? (MediaQuery.of(context).size.width / 2 - 150)
+                      : 500),
             ],
-          ).constrained(
-            maxWidth: state.isDuoSpanned
-                ? (MediaQuery.of(context).size.width / 2 - 150)
-                : 500);
+          );
   }
 
   String getCurrentErrorCode(WelcomePageState state) {

@@ -142,6 +142,10 @@ class WelcomePageState extends State<WelcomePage> {
     loadAuthInfo();
   }
 
+  void handleBackPressed() {
+    setState(() => pageIndex = 0);
+  }
+
   void handleMSFTPressed() async {
     //TODO will need to confirm this works on the web ;-)
     if (UniversalPlatform.isWeb) {
@@ -150,11 +154,13 @@ class WelcomePageState extends State<WelcomePage> {
       if (success) refreshDataAndLoadApp();
     } else {
       try {
+        isLoading = true;
+
         //TODO put this in a better place
         //TODO put the tenent and clientId in the same place as other keys
         final Config configAzureOnMS = new Config(
-          tenantid, //tenantID get from onenote
-          clientid, //client ID get from onenote
+          "xxx", //tenantID get from onenote
+          "xxx", //client ID get from onenote
           "openid profile offline_access user.read people.read people.read.all", //scope
           "https://login.microsoftonline.com/common/oauth2/nativeclient", //callbackURL
         );
@@ -168,8 +174,15 @@ class WelcomePageState extends State<WelcomePage> {
         var people = await msGraph.me.getPeople();
         showMessage(
             'Got ${people.value.length} from the graph, first name is ${people.value[0].userPrincipalName}');
+
+        // Hide panel since we know we're basically logged in now...
+        setState(() => showContent = false);
+        // Load main app
+        refreshDataAndLoadApp();
       } catch (e) {
         showError(e);
+      } finally {
+        isLoading = false;
       }
     }
   }
@@ -279,7 +292,8 @@ class _WelcomePageStateView extends StatelessWidget {
                           : EdgeInsets.all(0.0),
                       child: AnimatedBirdSplashWidget(
                         showText: state.isLoading,
-                        showSpannedView: state.isDuoSpanned,
+                        showSpannedView:
+                            !state.showContent && state.isDuoSpanned,
                       ),
                     ),
                   )
