@@ -1,4 +1,4 @@
-import 'package:flokk/msgraph/msgraphme.dart';
+import 'package:flokk/services/msgraph/msgraphme.dart';
 
 class MsGraph {
   Me me;

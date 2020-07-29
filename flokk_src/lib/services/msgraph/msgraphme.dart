@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:flokk/msgraph/models/message.dart';
-import 'package:flokk/msgraph/models/person.dart';
-import 'package:flokk/msgraph/models/photo_size.dart';
+import 'package:flokk/services/msgraph/models/message.dart';
+import 'package:flokk/services/msgraph/models/person.dart';
+import 'package:flokk/services/msgraph/models/photo_size.dart';
 import 'package:http/http.dart' as http;
 
 class Me {

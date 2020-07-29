@@ -9,6 +9,7 @@ import 'package:flokk/models/github_model.dart';
 import 'package:flokk/models/twitter_model.dart';
 import 'package:flokk/services/github_rest_service.dart';
 import 'package:flokk/services/google_rest/google_rest_service.dart';
+import 'package:flokk/services/msgraph/msgraph_rest_service.dart';
 import 'package:flokk/services/twitter_rest_service.dart';
 import 'package:flokk/styled_components/styled_dialogs.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +51,8 @@ abstract class AbstractCommand {
   TwitterRestService get twitterService => getProvided();
 
   GithubRestService get gitService => getProvided();
+
+  MsGraphRestService get msgraphService => getProvided();
 }
 
 /// //////////////////////////////////////////////////////////////////
@@ -66,12 +69,14 @@ mixin AuthorizedServiceCommandMixin on AbstractCommand {
   bool ignoreErrors = false;
 
   /// Runs a service that refreshes Auth if needed, and checks for errors on completion
-  Future<void> executeAuthServiceCmd(Future<HttpResponse> Function() cmd) async {
+  Future<void> executeAuthServiceCmd(
+      Future<HttpResponse> Function() cmd) async {
     /// Bail early if we're offline
     if (!appModel.isOnline) {
       Dialogs.show(OkCancelDialog(
         title: "No Connection",
-        message: "It appears your device is offline. Please check your connection and try again.",
+        message:
+            "It appears your device is offline. Please check your connection and try again.",
         onOkPressed: () => rootNav.pop(),
       ));
     }

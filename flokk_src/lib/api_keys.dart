@@ -17,4 +17,8 @@ class ApiKeys {
   /// GitHub
   String githubKey = "f2f8b842c78ba6fff5c4";
   String githubSecret = "a77d3c860bd11ddfaa1b49a5a43d9ad13038408a";
+
+  /// Microsoft Graph
+  String msgraphTenent = "";
+  String msgraphClientID = "";
 }

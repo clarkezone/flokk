@@ -1,20 +1,20 @@
 import 'dart:math';
 
-import 'package:aad_oauth/aad_oauth.dart';
-import 'package:aad_oauth/model/config.dart';
 import 'package:flokk/_internal/components/fading_index_stack.dart';
 import 'package:flokk/_internal/page_routes.dart';
 import 'package:flokk/_internal/url_launcher/url_launcher.dart';
 import 'package:flokk/api_keys.dart';
 import 'package:flokk/app_extensions.dart';
 import 'package:flokk/commands/contacts/refresh_contacts_command.dart';
+import 'package:flokk/commands/contacts/refresh_mscontacts_command.dart';
 import 'package:flokk/commands/social/refresh_social_command.dart';
 import 'package:flokk/commands/web_sign_in_command.dart';
 import 'package:flokk/models/auth_model.dart';
 import 'package:flokk/models/contacts_model.dart';
-import 'package:flokk/msgraph/msgraph.dart';
+
 import 'package:flokk/services/google_rest/google_rest_auth_service.dart';
 import 'package:flokk/services/google_rest/google_rest_service.dart';
+import 'package:flokk/services/msgraph/msgraph_rest_service.dart';
 import 'package:flokk/services/service_result.dart';
 import 'package:flokk/styled_components/clickable_text.dart';
 import 'package:flokk/styled_components/scrolling/styled_scrollview.dart';
@@ -71,6 +71,7 @@ class WelcomePageState extends State<WelcomePage> {
   @override
   void initState() {
     showContent = widget.initialPanelOpen;
+    //TODO: why is this not retreived from service provider?
     googleRest = GoogleRestService();
     loadAuthInfo();
 
@@ -122,6 +123,7 @@ class WelcomePageState extends State<WelcomePage> {
   void refreshDataAndLoadApp() async {
     /// Load initial contacts
     isLoading = true;
+    await RefreshMSContactsCommand(context).execute();
     await RefreshContactsCommand(context).execute();
     await RefreshSocialCommand(context)
         .execute(context.read<ContactsModel>().allContacts);
@@ -147,59 +149,22 @@ class WelcomePageState extends State<WelcomePage> {
   }
 
   void handleMSFTPressed() async {
-    //TODO will need to confirm this works on the web ;-)
-    if (UniversalPlatform.isWeb) {
-      bool success = await WebSignInCommand(context).execute();
-      // We're in :) Load main app
-      if (success) refreshDataAndLoadApp();
-    } else {
-      try {
-        isLoading = true;
+    MsGraphRestService grs =
+        Provider.of<MsGraphRestService>(context, listen: false);
+    isLoading = true;
+    var token = await grs.doLogin();
+    //We have a token! Update the model.
+    AuthModel model = Provider.of(context, listen: false);
+    model.msGraphAccessToken = token;
 
-        //TODO put this in a better place
-        //TODO put the tenent and clientId in the same place as other keys
-        final Config configAzureOnMS = new Config(
-          "xxx", //tenantID get from onenote
-          "xxx", //client ID get from onenote
-          "openid profile offline_access user.read people.read people.read.all", //scope
-          "https://login.microsoftonline.com/common/oauth2/nativeclient", //callbackURL
-        );
-
-        //TODO put all of this in the appropriate place
-        final AadOAuth oauth = new AadOAuth(configAzureOnMS);
-        await oauth.login();
-        var currentToken = await oauth.getAccessToken();
-
-        var msGraph = MsGraph(currentToken);
-        var people = await msGraph.me.getPeople();
-        showMessage(
-            'Got ${people.value.length} from the graph, first name is ${people.value[0].userPrincipalName}');
-
-        // Hide panel since we know we're basically logged in now...
-        setState(() => showContent = false);
-        // Load main app
-        refreshDataAndLoadApp();
-      } catch (e) {
-        showError(e);
-      } finally {
-        isLoading = false;
-      }
-    }
-  }
-
-  void showError(dynamic ex) {
-    showMessage(ex.toString());
-  }
-
-  void showMessage(String text) {
-    var alert = new AlertDialog(content: new Text(text), actions: <Widget>[
-      new FlatButton(
-          child: const Text("Ok"),
-          onPressed: () {
-            Navigator.pop(context);
-          })
-    ]);
-    showDialog(context: context, builder: (BuildContext context) => alert);
+    //TODO auth needs to report when the token expires
+    model.setExpiry(60 * 60);
+    model.scheduleSave();
+    // Hide panel since we know we're basically logged in now...
+    setState(() => showContent = false);
+    // Load main app
+    refreshDataAndLoadApp();
+    isLoading = false;
   }
 
   void handleStartPressed() async {

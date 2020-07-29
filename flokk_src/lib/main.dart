@@ -21,6 +21,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+import 'services/msgraph/msgraph_rest_service.dart';
+
 //Developer hook to force login while testing locally (sidesteps Oauth flow)
 const bool kForceWebLogin =
     bool.fromEnvironment('flokk.forceWebLogin', defaultValue: false);
@@ -65,6 +67,7 @@ void main() {
         Provider(create: (_) => GoogleRestService()),
         Provider(create: (_) => GithubRestService()),
         Provider(create: (_) => TwitterRestService()),
+        Provider(create: (_) => MsGraphRestService()),
 
         /// ROOT CONTEXT, Allows Commands to retrieve a 'safe' context that is not tied to any one view. Allows them to work on async tasks without issues.
         Provider<BuildContext>(create: (c) => c),

@@ -31,6 +31,17 @@ class AuthModel extends AbstractModel {
   }
 
   /////////////////////////////////////////////////////////////////////
+  // Graph Access Token
+  String _msgraphAccessToken;
+
+  String get msGraphAccessToken => _msgraphAccessToken;
+
+  set msGraphAccessToken(String value) {
+    _msgraphAccessToken = value;
+    notifyListeners();
+  }
+
+  /////////////////////////////////////////////////////////////////////
   // Access Token
   String _googleAccessToken;
 
@@ -44,6 +55,7 @@ class AuthModel extends AbstractModel {
   @override
   void reset([bool notify = true]) {
     Log.p("[AuthModel] Reset");
+    _msgraphAccessToken = null;
     _googleAccessToken = null;
     googleRefreshToken = null;
     googleSyncToken = null;
@@ -61,16 +73,20 @@ class AuthModel extends AbstractModel {
   @override
   void copyFromJson(Map<String, dynamic> json) {
     this
+      .._msgraphAccessToken = json["_msgraphAccessToken"]
       .._googleAccessToken = json["_googleAccessToken"]
       ..googleRefreshToken = json["googleRefreshToken"]
       ..googleSyncToken = json["googleSyncToken"]
       ..googleEmail = json["googleEmail"]
-      .._expiry = json["_expiry"] != null ? DateTime.parse(json["_expiry"]) : DateTime.fromMillisecondsSinceEpoch(0);
+      .._expiry = json["_expiry"] != null
+          ? DateTime.parse(json["_expiry"])
+          : DateTime.fromMillisecondsSinceEpoch(0);
     ;
   }
 
   @override
   Map<String, dynamic> toJson() => {
+        "_msgraphAccessToken": _msgraphAccessToken,
         "_googleAccessToken": _googleAccessToken,
         "googleRefreshToken": googleRefreshToken,
         "googleSyncToken": googleSyncToken,
