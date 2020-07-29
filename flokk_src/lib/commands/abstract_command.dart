@@ -6,6 +6,9 @@ import 'package:flokk/models/app_model.dart';
 import 'package:flokk/models/auth_model.dart';
 import 'package:flokk/models/contacts_model.dart';
 import 'package:flokk/models/github_model.dart';
+import 'package:flokk/models/msgraph_calendar_model.dart';
+import 'package:flokk/models/msgraph_emails_model.dart';
+import 'package:flokk/models/msgraph_sharedfiles_model.dart';
 import 'package:flokk/models/twitter_model.dart';
 import 'package:flokk/services/github_rest_service.dart';
 import 'package:flokk/services/google_rest/google_rest_service.dart';
@@ -44,6 +47,12 @@ abstract class AbstractCommand {
   GithubModel get githubModel => getProvided();
 
   AppModel get appModel => getProvided();
+
+  MSGraphCalendarModel get msgraphCalendarModel => getProvided();
+
+  MSEmailModel get msgraphEmailModel => getProvided();
+
+  MSSharedFilesModel get msgraphSharedFilesModel => getProvided();
 
   /// Services
   GoogleRestService get googleRestService => getProvided();

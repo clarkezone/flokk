@@ -21,6 +21,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+import 'models/msgraph_calendar_model.dart';
+import 'models/msgraph_emails_model.dart';
+import 'models/msgraph_sharedfiles_model.dart';
 import 'services/msgraph/msgraph_rest_service.dart';
 
 //Developer hook to force login while testing locally (sidesteps Oauth flow)
@@ -49,6 +52,10 @@ void main() {
   var twitterModel = TwitterModel(contactsModel);
   var githubModel = GithubModel(contactsModel);
   var appModel = AppModel(contactsModel);
+  var graphCalendarModel = MSGraphCalendarModel(contactsModel);
+  var graphEmailModel = MSEmailModel(contactsModel);
+  var graphFilesModel = MSSharedFilesModel(contactsModel);
+
   contactsModel.twitterModel = twitterModel;
   contactsModel.gitModel = githubModel;
 
@@ -61,6 +68,9 @@ void main() {
         ChangeNotifierProvider.value(value: contactsModel),
         ChangeNotifierProvider.value(value: twitterModel),
         ChangeNotifierProvider.value(value: githubModel),
+        ChangeNotifierProvider.value(value: graphCalendarModel),
+        ChangeNotifierProvider.value(value: graphEmailModel),
+        ChangeNotifierProvider.value(value: graphFilesModel),
         ChangeNotifierProvider(create: (c) => AuthModel()),
 
         /// SERVICES

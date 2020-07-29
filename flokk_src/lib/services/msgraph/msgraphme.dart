@@ -1,9 +1,12 @@
 import 'dart:convert';
 
 import 'package:flokk/_internal/http_client.dart';
+import 'package:flokk/services/msgraph/models/calender_event.dart';
+import 'package:flokk/services/msgraph/models/email.dart';
 import 'package:flokk/services/msgraph/models/message.dart';
 import 'package:flokk/services/msgraph/models/person.dart';
 import 'package:flokk/services/msgraph/models/photo_size.dart';
+import 'package:flokk/services/msgraph/models/shared_files.dart';
 import 'package:flokk/services/service_result.dart';
 import 'package:http/http.dart' as http;
 
@@ -45,7 +48,7 @@ class Me {
     }
   }
 
-  Future<dynamic> _getResponse(
+  Future<HttpResponse> _getResponse(
       String action, Map<String, String> headers) async {
     if (headers.length > 0) {
       _headers.addAll(headers);
@@ -134,6 +137,58 @@ class Me {
         People.fromJson(json.decode(response.body) as Map<String, dynamic>);
 
     return ServiceResult(peeps, response);
+  }
+
+  Future<ServiceResult<CalendarEvents>> getCalendarEvents(int numDays) async {
+    var dateNow = DateTime.now();
+    var startDateTimeString = dateNow.toIso8601String();
+    var endDateTimeString =
+        dateNow.add(new Duration(days: numDays)).toIso8601String();
+
+    final response = await _getResponse(
+        '/calendarView?startdatetime=$startDateTimeString&enddatetime=$endDateTimeString',
+        {'responseType': 'application/json'});
+
+    if (!response.success) {
+      return ServiceResult(null, response);
+    }
+
+    final calendarEvents = CalendarEvents.fromJson(
+        json.decode(response.body) as Map<String, dynamic>);
+
+    return ServiceResult(calendarEvents, response);
+  }
+
+  Future<ServiceResult<Emails>> getEmailsFromContact(
+      String contactEmailAddress) async {
+    final response = await _getResponse(
+        '/messages?\$filter=(from/emailAddress/address) eq \'$contactEmailAddress\'',
+        {'responseType': 'application/json'});
+
+    if (!response.success) {
+      return ServiceResult(null, response);
+    }
+
+    final emails =
+        Emails.fromJson(json.decode(response.body) as Map<String, dynamic>);
+
+    return ServiceResult(emails, response);
+  }
+
+  Future<ServiceResult<SharedFiles>> getSharedFilesFromContact(
+      String contactEmailAddress) async {
+    final response = await _getResponse(
+        '/insights/shared?&\$filter=(lastshared/sharedby/address eq \'$contactEmailAddress\')',
+        {'responseType': 'application/json'});
+
+    if (!response.success) {
+      return ServiceResult(null, response);
+    }
+
+    final sharedFiles = SharedFiles.fromJson(
+        json.decode(response.body) as Map<String, dynamic>);
+
+    return ServiceResult(sharedFiles, response);
   }
 
   Future<dynamic> createMessage(Message message) async {

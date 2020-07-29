@@ -7,6 +7,9 @@ import 'package:flokk/api_keys.dart';
 import 'package:flokk/app_extensions.dart';
 import 'package:flokk/commands/contacts/refresh_contacts_command.dart';
 import 'package:flokk/commands/contacts/refresh_mscontacts_command.dart';
+import 'package:flokk/commands/msgraph/refresh_mscalendarevents_command.dart';
+import 'package:flokk/commands/msgraph/refresh_msemails_command.dart';
+import 'package:flokk/commands/msgraph/refresh_mssharedfiles_command.dart';
 import 'package:flokk/commands/social/refresh_social_command.dart';
 import 'package:flokk/commands/web_sign_in_command.dart';
 import 'package:flokk/models/auth_model.dart';
@@ -17,7 +20,6 @@ import 'package:flokk/services/google_rest/google_rest_service.dart';
 import 'package:flokk/services/msgraph/msgraph_rest_service.dart';
 import 'package:flokk/services/service_result.dart';
 import 'package:flokk/styled_components/clickable_text.dart';
-import 'package:flokk/styled_components/scrolling/styled_scrollview.dart';
 import 'package:flokk/styled_components/styled_dialogs.dart';
 import 'package:flokk/styled_components/styled_progress_spinner.dart';
 import 'package:flokk/styles.dart';
@@ -127,6 +129,11 @@ class WelcomePageState extends State<WelcomePage> {
     await RefreshContactsCommand(context).execute();
     await RefreshSocialCommand(context)
         .execute(context.read<ContactsModel>().allContacts);
+    await RefreshMSCalendarEventsCommand(context).execute();
+    await RefreshMSeMailsCommand(context)
+        .execute("james@clarkezone.onmicrosoft.com");
+    await RefreshMSSharedFilesCommand(context)
+        .execute("james@clarkezone.onmicrosoft.com");
 
     /// Show main app view
     Navigator.push<void>(
