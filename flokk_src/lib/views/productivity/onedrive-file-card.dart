@@ -21,38 +21,38 @@ class OneDriveFileCard extends StatelessWidget {
 
     return Column(
       children: [
-        Row(children: [
-          Image(
-            image: StyledIcons.ppt,
-          ),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Contoso Research and Devvelopment Spend ",
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                    style:
-                        TextStyles.Body1.textHeight(1.4).textColor(theme.txt)),
-                VSpace(Insets.xs),
-                Row(
-                  children: [
-                    Text("Isaiah Langer", style: cardContentText),
-                    Text(" shared", style: cardTimeText),
-                    Container(
-                            width: 4,
-                            height: 4,
-                            margin: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                                color: Colors.black, shape: BoxShape.circle))
-                        .opacity(0.9),
-                    Text("Yesterday", style: cardTimeText).opacity(0.6),
-                  ],
-                ),
-              ],
+        Row(
+          children: [
+            Image(image: StyledIcons.ppt),
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Contoso Research and Devvelopment Spend ",
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      style: TextStyles.Body1.textHeight(1.4)
+                          .textColor(theme.txt)),
+                  VSpace(Insets.xs),
+                  Row(
+                    children: [
+                      Text("Isaiah Langer", style: cardContentText),
+                      Text(" shared", style: cardTimeText),
+                      Container(
+                              width: 4,
+                              height: 4,
+                              margin: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                  color: Colors.black, shape: BoxShape.circle))
+                          .opacity(0.9),
+                      Text("Yesterday", style: cardTimeText).opacity(0.6),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ]),
+          ],
+        ),
         Divider(color: theme.greyWeak.withOpacity(.35)),
       ],
     );
