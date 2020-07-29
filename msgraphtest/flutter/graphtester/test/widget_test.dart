@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:graphtester/main.dart';
+import 'package:graphtester/msgraph/models/calender_event.dart';
 import 'package:graphtester/msgraph/models/person.dart';
 
 void main() {
@@ -24,22 +25,22 @@ void main() {
     final peeps = CalendarEvents.fromJson(
         //Graph URL is in a comment in front of the _calendarEvents definition lower in this file
         json.decode(_calendarEvents) as Map<String, dynamic>);
-    expect(peeps.value.length, todo);
+    expect(peeps.value.length, 3);
   });
 
-  test('ShardFilesJsonReadTest', () {
-    final peeps = SharedFiles.fromJson(
-        //Graph URL is in a comment in front of the _sharedFilesJsonTestContent definition lower in this file
-        json.decode(_sharedFilesJsonTestContent) as Map<String, dynamic>);
-    expect(peeps.value.length, todo);
-  });
-
-  test('ShardFilesJsonReadTest', () {
-    final peeps = Email.fromJson(
-        //Graph URL is in a comment in front of the _emailJsonTestContent definition lower in this file
-        json.decode(_emailJsonTestContent) as Map<String, dynamic>);
-    expect(peeps.value.length, todo);
-  });
+//  test('ShardFilesJsonReadTest', () {
+//    final peeps = SharedFiles.fromJson(
+//        //Graph URL is in a comment in front of the _sharedFilesJsonTestContent definition lower in this file
+//        json.decode(_sharedFilesJsonTestContent) as Map<String, dynamic>);
+//    expect(peeps.value.length, todo);
+//  });
+//
+//  test('ShardFilesJsonReadTest', () {
+//    final peeps = Email.fromJson(
+//        //Graph URL is in a comment in front of the _emailJsonTestContent definition lower in this file
+//        json.decode(_emailJsonTestContent) as Map<String, dynamic>);
+//    expect(peeps.value.length, todo);
+//  });
 
   // testWidgets('Counter increments smoke test', (WidgetTester tester) async {
   //   // Build our app and trigger a frame.
