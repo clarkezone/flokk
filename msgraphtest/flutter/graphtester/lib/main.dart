@@ -115,6 +115,19 @@ class _MyHomePageState extends State<MyHomePage> {
         'Got ${emails.value.length} from the graph, first subject is ${emails.value[0].subject} with body preview ${emails.value[0].bodyPreview}');
   }
 
+  Future _getSharedFilesFromContact() async {
+    if (currentToken == "") {
+      showMessage("Please log in.");
+      return;
+    }
+    var msGraph = MsGraph(currentToken);
+    var sharedFiles = await msGraph.me
+        .getSharedFilesFromContact("James.Clarke@microsoft.com");
+
+    _setResult(
+        'Got ${sharedFiles.value.length} from the graph, first title is ${sharedFiles.value[0].resourceVisualization.title} with type ${sharedFiles.value[0].resourceVisualization.type}');
+  }
+
   void showError(dynamic ex) {
     showMessage(ex.toString());
   }
@@ -152,7 +165,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _incrementCounter() async {
-    await _getEmailsFromContact();
+    await _getSharedFilesFromContact();
+    //await _getEmailsFromContact();
     //await _getCalendarEvents();
     //await _getPeople();
     //await _getMe();

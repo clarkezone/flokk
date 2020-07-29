@@ -2,6 +2,7 @@ import 'package:graphtester/msgraph/models/calender_event.dart';
 import 'package:graphtester/msgraph/models/email.dart';
 import 'package:graphtester/msgraph/models/person.dart';
 import 'package:graphtester/msgraph/models/photo_size.dart';
+import 'package:graphtester/msgraph/models/shared_files.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -145,6 +146,19 @@ class Me {
         Emails.fromJson(json.decode(response) as Map<String, dynamic>);
 
     return emails;
+  }
+
+  Future<SharedFiles> getSharedFilesFromContact(
+      String contactEmailAddress) async {
+
+    final response = await _getResponseAsString(
+        '/insights/shared?&\$filter=(lastshared/sharedby/address eq \'$contactEmailAddress\')',
+        {'responseType': 'application/json'});
+
+    final sharedFiles =
+        SharedFiles.fromJson(json.decode(response) as Map<String, dynamic>);
+
+    return sharedFiles;
   }
 
   Future<dynamic> createMessage(Message message) async {
