@@ -258,7 +258,8 @@ class _SocialActivitySectionState extends State<SocialActivitySection> {
                 Icons.more_vert,
                 size: 22,
                 color: theme.accent1Darker,
-              ),
+              ).alignment(Alignment.centerRight),
+              padding: EdgeInsets.all(0),
             );
 
         return Column(
@@ -272,8 +273,8 @@ class _SocialActivitySectionState extends State<SocialActivitySection> {
                                 ContactStoreType.Microsoft
                             ? "RECENT ACTIVITIES"
                             : "SOCIAL ACTIVITIES",
-                        style: headerStyle.textColor(theme.accent1Darker))
-                    .flexible(),
+                        style: headerStyle.textColor(theme.accent1Darker)),
+                Spacer(),
                 OneLineText(
                   sections[tabIndex].toUpperCase(),
                   style: TextStyles.Footnote.textColor(
