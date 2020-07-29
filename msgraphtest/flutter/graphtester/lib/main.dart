@@ -102,6 +102,19 @@ class _MyHomePageState extends State<MyHomePage> {
         'Got ${events.value.length} from the graph, first subject is ${events.value[0].subject}');
   }
 
+  Future _getEmailsFromContact() async {
+    if (currentToken == "") {
+      showMessage("Please log in.");
+      return;
+    }
+    var msGraph = MsGraph(currentToken);
+    var emails =
+        await msGraph.me.getEmailsFromContact("James.Clarke@microsoft.com");
+
+    _setResult(
+        'Got ${emails.value.length} from the graph, first subject is ${emails.value[0].subject} with body preview ${emails.value[0].bodyPreview}');
+  }
+
   void showError(dynamic ex) {
     showMessage(ex.toString());
   }
@@ -139,7 +152,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _incrementCounter() async {
-    await _getCalendarEvents();
+    await _getEmailsFromContact();
+    //await _getCalendarEvents();
     //await _getPeople();
     //await _getMe();
   }

@@ -1,4 +1,5 @@
 import 'package:graphtester/msgraph/models/calender_event.dart';
+import 'package:graphtester/msgraph/models/email.dart';
 import 'package:graphtester/msgraph/models/person.dart';
 import 'package:graphtester/msgraph/models/photo_size.dart';
 import 'package:http/http.dart' as http;
@@ -133,6 +134,17 @@ class Me {
         CalendarEvents.fromJson(json.decode(response) as Map<String, dynamic>);
 
     return calendarEvents;
+  }
+
+  Future<Emails> getEmailsFromContact(String contactEmailAddress) async {
+    final response = await _getResponseAsString(
+        '/messages?\$filter=(from/emailAddress/address) eq \'$contactEmailAddress\'',
+        {'responseType': 'application/json'});
+
+    final emails =
+        Emails.fromJson(json.decode(response) as Map<String, dynamic>);
+
+    return emails;
   }
 
   Future<dynamic> createMessage(Message message) async {
