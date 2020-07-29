@@ -13,6 +13,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:graphtester/main.dart';
 import 'package:graphtester/msgraph/models/calender_event.dart';
 import 'package:graphtester/msgraph/models/person.dart';
+import 'package:graphtester/msgraph/models/shared_files.dart';
 
 void main() {
   test('PeopleJsonReadTest', () {
@@ -28,12 +29,12 @@ void main() {
     expect(peeps.value.length, 3);
   });
 
-//  test('ShardFilesJsonReadTest', () {
-//    final peeps = SharedFiles.fromJson(
-//        //Graph URL is in a comment in front of the _sharedFilesJsonTestContent definition lower in this file
-//        json.decode(_sharedFilesJsonTestContent) as Map<String, dynamic>);
-//    expect(peeps.value.length, todo);
-//  });
+  test('ShardFilesJsonReadTest', () {
+    final peeps = SharedFiles.fromJson(
+        //Graph URL is in a comment in front of the _sharedFilesJsonTestContent definition lower in this file
+        json.decode(_sharedFilesJsonTestContent) as Map<String, dynamic>);
+    expect(peeps.value.length, 4);
+  });
 //
 //  test('ShardFilesJsonReadTest', () {
 //    final peeps = Email.fromJson(
@@ -302,7 +303,8 @@ const _calendarEvents = r'''
 }
 ''';
 
-// query https://graph.microsoft.com/v1.0/me/drive/sharedWithMe
+// query https://graph.microsoft.com/v1.0/me/insights/shared?&$filterr=
+// https://docs.microsoft.com/en-us/graph/api/insights-list-shared?view=graph-rest-1.0
 const _sharedFilesJsonTestContent = r'''
 {
     "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('40e17a24-8b35-4a07-8e7a-bbf5861ef2ee')/insights/shared",
@@ -359,7 +361,11 @@ const _sharedFilesJsonTestContent = r'''
                     "address": "AdeleV@clarkezone.onmicrosoft.com",
                     "id": "291d2d44-eb35-4695-8445-0cd2739b253b"
                 },
-                "sharingReference": {}
+                "sharingReference": {
+                    "webUrl": "https://teams.microsoft.com/l/chat/19:meeting_ZGYyMzhiY2UtZTNhZC00ZDJmLTk3NGMtOWI5MDQwYzIxMzAw@thread.v2/conversations",
+                    "id": "users/75563b36-c624-49b5-a8b7-6dc9df5c1bcd/messages/AAMkADUwOWFjMjA0LTkwNzgtNGYwZS04NGUyLTE0ZTU5NjU5YjgyMABGAAAAAACjki8ULWrfSKczZ0tsS8PTBwDLnNJIMi26RoTYydbo1ynLAABsZxsTAADLnNJIMi26RoTYydbo1ynLAAPiKdqNAAA=",
+                    "type": "microsoft.graph.message"
+                }
             },
             "resourceVisualization": {
                 "title": "Presentation",
@@ -375,6 +381,38 @@ const _sharedFilesJsonTestContent = r'''
                 "webUrl": "https://clarkezone-my.sharepoint.com/personal/adelev_clarkezone_onmicrosoft_com/_layouts/15/Doc.aspx?sourcedoc=%7B717D3BCB-0353-4E14-912B-693B9C69BF36%7D&file=Presentation.pptx&action=edit&mobileredirect=true&DefaultItemOpen=1",
                 "id": "drives/b!Gdv0CEmYDEmuFPKs3pr3hgo2cenEuQpDq19lm9uXltzLpBuN6hMlS4AarqTX5E21/items/01CQBQNEOLHN6XCUYDCRHJCK3JHOOGTPZW",
                 "type": "microsoft.graph.driveItem"
+            }
+        },
+        {   
+            "id": "id-value",
+            "lastShared": {
+                "sharedDateTime": "sharedDateTime-value",  
+                "sharingSubject": "sharingSubject-value",
+                "sharingType": "sharingType-value", 
+                "sharedBy": {
+                    "displayName": "displayName-value", 
+                    "id": "id-value" 
+                },
+                "sharingReference": {
+                    "webUrl": "webUrl-value",
+                    "type": "type-value", 
+                    "id": "id-value"
+                }
+            },
+            "resourceVisualization": {
+                "title": "title-value", 
+                "type": "type-value",
+                "mediaType": "mediaType-value",
+                "previewImageUrl": "previewImageUrl-value", 
+                "previewText": "previewText-value", 
+                "containerWebUrl": "containerWebUrl-value", 
+                "containerDisplayName": "containerDisplayName-value", 
+                "containerType": "containerType-value" 
+            },
+            "resourceReference" : {
+                "webUrl": "webUrl-value", 
+                "id": "id-value", 
+                "type": "type-value"
             }
         }
     ]

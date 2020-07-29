@@ -43,6 +43,42 @@ CalendarEvent _$CalendarEventFromJson(Map<String, dynamic> json) {
     isOrganizer: json['isOrganizer'] as bool,
     responseRequested: json['responseRequested'] as bool,
     seriesMasterId: json['seriesMasterId'] as String,
+    showAs: json['showAs'] as String,
+    type: json['type'] as String,
+    webLink: json['webLink'] as String,
+    onlineMeetingUrl: json['onlineMeetingUrl'] as String,
+    isOnlineMeeting: json['isOnlineMeeting'] as bool,
+    onlineMeetingProvider: json['onlineMeetingProvider'] as String,
+    allowNewTimeProposals: json['allowNewTimeProposals'] as bool,
+    recurrence: json['recurrence'] as String,
+    onlineMeeting: json['onlineMeeting'] as String,
+    responseStatus: json['responseStatus'] == null
+        ? null
+        : ResponseStatus.fromJson(
+            json['responseStatus'] as Map<String, dynamic>),
+    body: json['body'] == null
+        ? null
+        : Body.fromJson(json['body'] as Map<String, dynamic>),
+    start: json['start'] == null
+        ? null
+        : Start.fromJson(json['start'] as Map<String, dynamic>),
+    end: json['end'] == null
+        ? null
+        : End.fromJson(json['end'] as Map<String, dynamic>),
+    location: json['location'] == null
+        ? null
+        : Location.fromJson(json['location'] as Map<String, dynamic>),
+    locations: (json['locations'] as List)
+        ?.map((e) =>
+            e == null ? null : Location.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+    attendees: (json['attendees'] as List)
+        ?.map((e) =>
+            e == null ? null : Attendee.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+    organizer: json['organizer'] == null
+        ? null
+        : EmailAddress.fromJson(json['organizer'] as Map<String, dynamic>),
   );
 }
 
@@ -68,6 +104,23 @@ Map<String, dynamic> _$CalendarEventToJson(CalendarEvent instance) =>
       'isOrganizer': instance.isOrganizer,
       'responseRequested': instance.responseRequested,
       'seriesMasterId': instance.seriesMasterId,
+      'showAs': instance.showAs,
+      'type': instance.type,
+      'webLink': instance.webLink,
+      'onlineMeetingUrl': instance.onlineMeetingUrl,
+      'isOnlineMeeting': instance.isOnlineMeeting,
+      'onlineMeetingProvider': instance.onlineMeetingProvider,
+      'allowNewTimeProposals': instance.allowNewTimeProposals,
+      'recurrence': instance.recurrence,
+      'onlineMeeting': instance.onlineMeeting,
+      'responseStatus': instance.responseStatus,
+      'body': instance.body,
+      'start': instance.start,
+      'end': instance.end,
+      'location': instance.location,
+      'locations': instance.locations,
+      'attendees': instance.attendees,
+      'organizer': instance.organizer,
     };
 
 ResponseStatus _$ResponseStatusFromJson(Map<String, dynamic> json) {
