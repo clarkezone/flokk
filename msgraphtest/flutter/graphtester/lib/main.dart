@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:msgraph/msgraph.dart';
 import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MyApp());
@@ -66,6 +70,44 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final AadOAuth oauth = new AadOAuth(configAzureADMS);
   String _counter = "";
+
+  // Windows only
+  MethodChannel channel;
+  SharedPreferences prefs;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if(Platform.isWindows)
+    {
+      initNotSoSecureStorageOnWindows();
+    }
+  }
+
+  void initNotSoSecureStorageOnWindows() async {
+    channel = new MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
+    prefs = await SharedPreferences.getInstance();
+
+    channel.setMockMethodCallHandler((MethodCall call) async {
+      switch(call.method) {
+        case 'write': {
+          await prefs.setString(call.arguments['key'] as String, call.arguments['value'] as String);
+          return null;
+        }
+        break;
+        case 'read': {
+          return prefs.getString(call.arguments['key'] as String);
+        }
+        break;
+        case 'delete': {
+          await prefs.setString(call.arguments['key'] as String, null);
+          return null;
+        }
+        break;
+      }
+    });
+  }
 
   Future _getMe() async {
     if (currentToken == "") {
