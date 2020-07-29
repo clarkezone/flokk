@@ -51,7 +51,9 @@ CalendarEvent _$CalendarEventFromJson(Map<String, dynamic> json) {
     onlineMeetingProvider: json['onlineMeetingProvider'] as String,
     allowNewTimeProposals: json['allowNewTimeProposals'] as bool,
     recurrence: json['recurrence'] as String,
-    onlineMeeting: json['onlineMeeting'] as String,
+    onlineMeeting: json['onlineMeeting'] == null
+        ? null
+        : OnlineMeeting.fromJson(json['onlineMeeting'] as Map<String, dynamic>),
     responseStatus: json['responseStatus'] == null
         ? null
         : ResponseStatus.fromJson(
@@ -192,4 +194,15 @@ Map<String, dynamic> _$AttendeeToJson(Attendee instance) => <String, dynamic>{
       'type': instance.type,
       'status': instance.status,
       'emailAddress': instance.emailAddress,
+    };
+
+OnlineMeeting _$OnlineMeetingFromJson(Map<String, dynamic> json) {
+  return OnlineMeeting(
+    joinUrl: json['joinUrl'] as String,
+  );
+}
+
+Map<String, dynamic> _$OnlineMeetingToJson(OnlineMeeting instance) =>
+    <String, dynamic>{
+      'joinUrl': instance.joinUrl,
     };

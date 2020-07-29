@@ -44,7 +44,7 @@ class CalendarEvent {
   final String onlineMeetingProvider;
   final bool allowNewTimeProposals;
   final String recurrence;
-  final String onlineMeeting;
+  final OnlineMeeting onlineMeeting;
   final ResponseStatus responseStatus;
   final Body body;
   final Start start;
@@ -160,4 +160,15 @@ class Attendee {
   factory Attendee.fromJson(Map<String, dynamic> json) => _$AttendeeFromJson(json);
 
   Map<String, dynamic> toJson() => _$AttendeeToJson(this);
+}
+
+@JsonSerializable()
+class OnlineMeeting {
+  String joinUrl;
+
+  OnlineMeeting({this.joinUrl});
+
+  factory OnlineMeeting.fromJson(Map<String, dynamic> json) => _$OnlineMeetingFromJson(json);
+
+  Map<String, dynamic> toJson() => _$OnlineMeetingToJson(this);
 }
