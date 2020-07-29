@@ -1,5 +1,6 @@
 import 'package:flokk/api_keys.dart';
 import 'package:flokk/services/msgraph/models/person.dart';
+import 'package:flokk/services/service_result.dart';
 import 'package:flutter/material.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:flokk/services/msgraph/msgraph.dart';
@@ -18,9 +19,9 @@ class MsGraphRestService {
       return "";
     } else {
       try {
-        final Config configAzureOnMS = new Config(
-          ApiKeys().githubKey,
-          ApiKeys().githubKey,
+        final Config configAzureOnMS = Config(
+          ApiKeys().msgraphTenent,
+          ApiKeys().msgraphClientID,
           "openid profile offline_access user.read people.read people.read.all", //scope
           "https://login.microsoftonline.com/common/oauth2/nativeclient", //callbackURL
         );
@@ -35,7 +36,7 @@ class MsGraphRestService {
     }
   }
 
-  Future<People> getPeople(String syncToken) async {
+  Future<ServiceResult<People>> getPeople(String syncToken) async {
     //TODO handle token expiry
     if (syncToken != "" && syncToken != null) {
       currentToken = syncToken;
