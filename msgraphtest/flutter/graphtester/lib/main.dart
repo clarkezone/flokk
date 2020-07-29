@@ -90,6 +90,18 @@ class _MyHomePageState extends State<MyHomePage> {
         'Got ${people.value.length} from the graph, first name is ${people.value[0].userPrincipalName}');
   }
 
+  Future _getCalendarEvents() async {
+    if (currentToken == "") {
+      showMessage("Please log in.");
+      return;
+    }
+    var msGraph = MsGraph(currentToken);
+    var events = await msGraph.me.getCalendarEvents(2);
+
+    _setResult(
+        'Got ${events.value.length} from the graph, first subject is ${events.value[0].subject}');
+  }
+
   void showError(dynamic ex) {
     showMessage(ex.toString());
   }
@@ -127,7 +139,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _incrementCounter() async {
-    await _getPeople();
+    await _getCalendarEvents();
+    //await _getPeople();
     //await _getMe();
   }
 

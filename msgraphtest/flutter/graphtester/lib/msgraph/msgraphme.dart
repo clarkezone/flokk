@@ -1,3 +1,4 @@
+import 'package:graphtester/msgraph/models/calender_event.dart';
 import 'package:graphtester/msgraph/models/person.dart';
 import 'package:graphtester/msgraph/models/photo_size.dart';
 import 'package:http/http.dart' as http;
@@ -116,6 +117,22 @@ class Me {
         People.fromJson(json.decode(response) as Map<String, dynamic>);
 
     return peeps;
+  }
+
+  Future<CalendarEvents> getCalendarEvents(int numDays) async {
+    var dateNow = DateTime.now();
+    var startDateTimeString = dateNow.toIso8601String();
+    var endDateTimeString =
+        dateNow.add(new Duration(days: numDays)).toIso8601String();
+
+    final response = await _getResponseAsString(
+        '/calendarView?startdatetime=$startDateTimeString&enddatetime=$endDateTimeString',
+        {'responseType': 'application/json'});
+
+    final calendarEvents =
+        CalendarEvents.fromJson(json.decode(response) as Map<String, dynamic>);
+
+    return calendarEvents;
   }
 
   Future<dynamic> createMessage(Message message) async {
