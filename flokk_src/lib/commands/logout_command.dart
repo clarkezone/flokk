@@ -33,7 +33,10 @@ class LogoutCommand extends AbstractCommand {
     appModel.theme = ThemeType.FlockGreen;
     appModel.reset(false);
 
+    await msgraphService.doLogout();
+
     //Show login page
-    rootNav.pushReplacement(PageRoutes.fade(() => WelcomePage(initialPanelOpen: true)));
+    rootNav.pushReplacement(
+        PageRoutes.fade(() => WelcomePage(initialPanelOpen: true)));
   }
 }

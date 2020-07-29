@@ -22,6 +22,30 @@ class RefreshMSContactsCommand extends AbstractCommand
         syncToken = null;
       }
       result = await msgraphService.getPeople(syncToken);
+
+      if (result.success) {
+        authModel.googleSyncToken = syncToken;
+        //Iterate through returned contacts and either update existing contact or append
+        for (Person p in result.content.value) {
+          if (contactsModel.allContacts.any((x) => x.id == p.id)) {
+            //TODO
+            //contactsModel.swapContactById(n);
+          } else {
+            var n = ContactData();
+
+            n.googleId = p.id;
+            n.nameFull = p.displayName;
+            n.nameFamily = p.surname;
+            n.nameGiven = p.givenName;
+            //Add camefrommsft flag
+            contactsModel.addContact(n);
+          }
+        }
+        //contactsModel.allContacts.removeWhere((ContactData c) => c.isDeleted);
+        contactsModel.notify();
+        contactsModel.scheduleSave();
+      }
+
       Log.p("MSGraph People  loaded = ${result.content.value.length ?? 0}");
       return result.response;
     });

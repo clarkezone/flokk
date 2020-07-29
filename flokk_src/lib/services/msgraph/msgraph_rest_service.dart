@@ -1,7 +1,6 @@
 import 'package:flokk/api_keys.dart';
 import 'package:flokk/services/msgraph/models/person.dart';
 import 'package:flokk/services/service_result.dart';
-import 'package:flutter/material.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:flokk/services/msgraph/msgraph.dart';
 import 'package:aad_oauth/aad_oauth.dart';
@@ -9,6 +8,18 @@ import 'package:aad_oauth/model/config.dart';
 
 class MsGraphRestService {
   String currentToken = "";
+  AadOAuth oauth;
+
+  MsGraphRestService() {
+    final Config configAzureOnMS = Config(
+      ApiKeys().msgraphTenent,
+      ApiKeys().msgraphClientID,
+      "openid profile offline_access user.read people.read people.read.all", //scope
+      "https://login.microsoftonline.com/common/oauth2/nativeclient", //callbackURL
+    );
+
+    oauth = AadOAuth(configAzureOnMS);
+  }
 
   Future<String> doLogin() async {
     if (UniversalPlatform.isWeb) {
@@ -19,14 +30,6 @@ class MsGraphRestService {
       return "";
     } else {
       try {
-        final Config configAzureOnMS = Config(
-          ApiKeys().msgraphTenent,
-          ApiKeys().msgraphClientID,
-          "openid profile offline_access user.read people.read people.read.all", //scope
-          "https://login.microsoftonline.com/common/oauth2/nativeclient", //callbackURL
-        );
-
-        final AadOAuth oauth = AadOAuth(configAzureOnMS);
         await oauth.login();
         currentToken = await oauth.getAccessToken();
         return currentToken;
@@ -44,5 +47,9 @@ class MsGraphRestService {
     //TODO error handing
     var msGraph = MsGraph(currentToken);
     return await msGraph.me.getPeople();
+  }
+
+  doLogout() {
+    oauth.logout();
   }
 }
