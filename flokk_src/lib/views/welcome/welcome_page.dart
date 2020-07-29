@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:aad_oauth/aad_oauth.dart';
+import 'package:aad_oauth/model/config.dart';
 import 'package:flokk/_internal/components/fading_index_stack.dart';
 import 'package:flokk/_internal/page_routes.dart';
 import 'package:flokk/_internal/url_launcher/url_launcher.dart';
@@ -10,6 +12,7 @@ import 'package:flokk/commands/social/refresh_social_command.dart';
 import 'package:flokk/commands/web_sign_in_command.dart';
 import 'package:flokk/models/auth_model.dart';
 import 'package:flokk/models/contacts_model.dart';
+import 'package:flokk/msgraph/msgraph.dart';
 import 'package:flokk/services/google_rest/google_rest_auth_service.dart';
 import 'package:flokk/services/google_rest/google_rest_service.dart';
 import 'package:flokk/services/service_result.dart';
@@ -137,6 +140,53 @@ class WelcomePageState extends State<WelcomePage> {
   void handleRefreshPressed() {
     setState(() => _isLoading = true);
     loadAuthInfo();
+  }
+
+  void handleMSFTPressed() async {
+    //TODO will need to confirm this works on the web ;-)
+    if (UniversalPlatform.isWeb) {
+      bool success = await WebSignInCommand(context).execute();
+      // We're in :) Load main app
+      if (success) refreshDataAndLoadApp();
+    } else {
+      try {
+        //TODO put this in a better place
+        //TODO put the tenent and clientId in the same place as other keys
+        final Config configAzureOnMS = new Config(
+          tenantid, //tenantID get from onenote
+          clientid, //client ID get from onenote
+          "openid profile offline_access user.read people.read people.read.all", //scope
+          "https://login.microsoftonline.com/common/oauth2/nativeclient", //callbackURL
+        );
+
+        //TODO put all of this in the appropriate place
+        final AadOAuth oauth = new AadOAuth(configAzureOnMS);
+        await oauth.login();
+        var currentToken = await oauth.getAccessToken();
+
+        var msGraph = MsGraph(currentToken);
+        var people = await msGraph.me.getPeople();
+        showMessage(
+            'Got ${people.value.length} from the graph, first name is ${people.value[0].userPrincipalName}');
+      } catch (e) {
+        showError(e);
+      }
+    }
+  }
+
+  void showError(dynamic ex) {
+    showMessage(ex.toString());
+  }
+
+  void showMessage(String text) {
+    var alert = new AlertDialog(content: new Text(text), actions: <Widget>[
+      new FlatButton(
+          child: const Text("Ok"),
+          onPressed: () {
+            Navigator.pop(context);
+          })
+    ]);
+    showDialog(context: context, builder: (BuildContext context) => alert);
   }
 
   void handleStartPressed() async {

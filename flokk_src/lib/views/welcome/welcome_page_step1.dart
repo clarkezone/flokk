@@ -58,7 +58,7 @@ class WelcomePageStep1 extends StatelessWidget {
                 children: [
                   PrimaryTextBtn(
                     "Sign in with Microsoft",
-                    onPressed: state.handleStartPressed,
+                    onPressed: state.handleMSFTPressed,
                   ).padding(top: Insets.m).width(239),
                   Text(
                     "or",
