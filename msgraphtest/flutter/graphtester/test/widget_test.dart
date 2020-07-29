@@ -7,11 +7,10 @@
 
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:graphtester/main.dart';
 import 'package:graphtester/msgraph/models/calender_event.dart';
+import 'package:graphtester/msgraph/models/email.dart';
 import 'package:graphtester/msgraph/models/person.dart';
 import 'package:graphtester/msgraph/models/shared_files.dart';
 
@@ -35,13 +34,13 @@ void main() {
         json.decode(_sharedFilesJsonTestContent) as Map<String, dynamic>);
     expect(peeps.value.length, 4);
   });
-//
-//  test('ShardFilesJsonReadTest', () {
-//    final peeps = Email.fromJson(
-//        //Graph URL is in a comment in front of the _emailJsonTestContent definition lower in this file
-//        json.decode(_emailJsonTestContent) as Map<String, dynamic>);
-//    expect(peeps.value.length, todo);
-//  });
+
+  test('EmailJsonReadTest', () {
+    final peeps = Emails.fromJson(
+        //Graph URL is in a comment in front of the _emailJsonTestContent definition lower in this file
+        json.decode(_emailJsonTestContent) as Map<String, dynamic>);
+    expect(peeps.value.length, 2);
+  });
 
   // testWidgets('Counter increments smoke test', (WidgetTester tester) async {
   //   // Build our app and trigger a frame.
