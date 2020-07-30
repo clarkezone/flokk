@@ -13,7 +13,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class OutlookEventCard extends StatelessWidget {
-
   const OutlookEventCard(this.event, {Key key}) : super(key: key);
 
   static DateFormat get timeFmt => DateFormat.jm();
@@ -23,11 +22,14 @@ class OutlookEventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppTheme theme = context.watch();
-    var cardTimeText = TextStyles.H2.textColor(theme.txt);
-    var cardContentText = TextStyles.Body2.textColor(theme.txt);
+    final cardTimeText = TextStyles.H2.textColor(theme.txt);
+    final cardContentText = TextStyles.Body2.textColor(theme.txt);
 
-    var startTime = DateTime.tryParse(event.start.dateTime);
-    var endTime = DateTime.tryParse(event.end.dateTime);
+    final startTime = DateTime.tryParse(event.start.dateTime);
+    final endTime = DateTime.tryParse(event.end.dateTime);
+    final location = event?.location?.displayName == ""
+        ? "Unknown"
+        : event?.location?.displayName;
 
     return TransparentBtn(
       onPressed: () => {},
@@ -48,9 +50,14 @@ class OutlookEventCard extends StatelessWidget {
                       Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text(startTime != null ? timeFmt.format(startTime) : '', style: cardTimeText),
+                          Text(
+                              startTime != null
+                                  ? timeFmt.format(startTime)
+                                  : '',
+                              style: cardTimeText),
                           VSpace(Insets.m),
-                          Text(endTime != null ? timeFmt.format(endTime) : '', style: cardTimeText),
+                          Text(endTime != null ? timeFmt.format(endTime) : '',
+                              style: cardTimeText),
                         ],
                       ),
                     ],
@@ -64,8 +71,7 @@ class OutlookEventCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                      event?.subject ?? '',
+                  Text(event?.subject ?? '',
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                       style: TextStyles.Body1.textHeight(1.4)
@@ -79,20 +85,29 @@ class OutlookEventCard extends StatelessWidget {
                         semanticLabel: 'Meeting location',
                       ),
                       HSpace(Insets.xs),
-                      Text(event?.location?.displayName ?? '', style: cardContentText),
+                      Text(
+                          event.isOnlineMeeting
+                              ? 'Microsoft Teams Meeting'
+                              : location,
+                          style: cardContentText),
                     ],
-                  ).opacity(0.6),
+                  ).opacity(0.6).translate(offset: Offset(-3, 0)),
                   VSpace(Insets.m),
                   Row(
-                    children: event?.attendees?.map((attendee) => [
-                      StyledUserAvatar(
-                        contact: ContactData()
-                          ..nameGiven = attendee?.emailAddress?.name ?? '',
-                        useInitials: true,
-                        size: 32,
-                      ),
-                      HSpace(Insets.sm),
-                    ])?.expand((i) => i)?.toList() ?? [],
+                    children: event?.attendees
+                            ?.map((attendee) => [
+                                  StyledUserAvatar(
+                                    contact: ContactData()
+                                      ..nameGiven =
+                                          attendee?.emailAddress?.name ?? '',
+                                    useInitials: true,
+                                    size: 32,
+                                  ),
+                                  HSpace(Insets.sm),
+                                ])
+                            ?.expand((i) => i)
+                            ?.toList() ??
+                        [],
                   ),
                 ],
               ),

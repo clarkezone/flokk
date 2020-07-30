@@ -1,10 +1,10 @@
 import 'package:flokk/_internal/components/spacing.dart';
+import 'package:flokk/_internal/utils/date_utils.dart';
 import 'package:flokk/services/msgraph/models/shared_files.dart';
 import 'package:flokk/styled_components/styled_icons.dart';
 import 'package:flokk/styles.dart';
 import 'package:flokk/themes.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flokk/app_extensions.dart';
 
@@ -19,7 +19,6 @@ class OneDriveFileCard extends StatelessWidget {
     AppTheme theme = context.watch();
     final cardTimeText = TextStyles.Body2.textColor(theme.txt);
     final cardContentText = TextStyles.H2.textColor(theme.txt);
-    final f = DateFormat('hh:mm MM-dd');
 
     Widget fileIcon;
     switch (file.resourceVisualization.type) {
@@ -65,9 +64,9 @@ class OneDriveFileCard extends StatelessWidget {
                                   color: Colors.black, shape: BoxShape.circle))
                           .opacity(0.9),
                       Text(
-                        f.format(
-                          DateTime.parse(file.lastShared.sharedDateTime),
-                        ),
+                        DateFormats.friendlyDateTime(
+                            DateTime.parse(file.lastShared.sharedDateTime),
+                            'MM-dd'),
                         style: cardTimeText,
                       ).opacity(0.6),
                     ],
