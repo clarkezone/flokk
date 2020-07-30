@@ -66,7 +66,8 @@ class ContactsModel extends AbstractModel {
       allContacts.where((c) => !c.isDeleted).toList();
 
   List<ContactData> get starred =>
-      allContacts.where((c) => c.isStarred).toList();
+      //allContacts.where((c) => c.isStarred).toList();
+      allContacts.toList();
 
   List<ContactData> get allContacts => _allContacts;
   List<ContactData> _allContacts = [];
