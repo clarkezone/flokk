@@ -162,8 +162,9 @@ class Me {
   Future<ServiceResult<Emails>> getEmailsFromContact(
       String contactEmailAddress) async {
     final response = await _getResponse(
-        '/messages?\$filter=(from/emailAddress/address) eq \'$contactEmailAddress\'',
+        '/mailFolders/AQMkADgzNzRhMjA0LWI2ZTEtNDk2Zi1iNmU4LTA3Y2Y3NDZiZDU4ZAAuAAADeOGL1FuToU2DhupkGnk9AgEAbPfkKItXh0OOnETFTjBl-wAAAgEMAAAA/messages',
         {'responseType': 'application/json'});
+    // ?\$filter=(from/emailAddress/address) eq \'$contactEmailAddress\'
 
     if (!response.success) {
       return ServiceResult(null, response);
@@ -178,8 +179,8 @@ class Me {
   Future<ServiceResult<SharedFiles>> getSharedFilesFromContact(
       String contactEmailAddress) async {
     final response = await _getResponse(
-        '/insights/shared?&\$filter=(lastshared/sharedby/address eq \'$contactEmailAddress\')',
-        {'responseType': 'application/json'});
+        '/insights/shared', {'responseType': 'application/json'});
+    // '/insights/shared?&\$filter=(lastshared/sharedby/address eq \'$contactEmailAddress\')'
 
     if (!response.success) {
       return ServiceResult(null, response);
