@@ -66,9 +66,9 @@ dependencies:
 dependency_overrides:
   shared_preferences:
     git:
-      url: git://github.com/franciscojma86/plugins.git
+      url: git://github.com/azchohfi/plugins.git
       path: packages/shared_preferences/shared_preferences
-      ref: 4ae292668479de7bf8122fb60bd5a0fa37840909
+      ref: 2c5be704d6e3fb64953ddbcb4c20e8b86ce3b8ee
 
 dev_dependencies:
   build_runner: ^1.0.0 #in order to run codegen you need to be on the flutter stable branch, then type this command: flutter pub run build_runner build
