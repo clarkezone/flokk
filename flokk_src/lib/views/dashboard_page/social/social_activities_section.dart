@@ -5,6 +5,8 @@ import 'package:flokk/app_extensions.dart';
 import 'package:flokk/globals.dart';
 import 'package:flokk/models/app_model.dart';
 import 'package:flokk/models/github_model.dart';
+import 'package:flokk/models/msgraph_emails_model.dart';
+import 'package:flokk/models/msgraph_sharedfiles_model.dart';
 import 'package:flokk/models/twitter_model.dart';
 import 'package:flokk/styled_components/social/git_item_renderer.dart';
 import 'package:flokk/styled_components/social/tweet_item_renderer.dart';
@@ -44,6 +46,9 @@ class _SocialActivitySectionState extends State<SocialActivitySection> {
     AppTheme theme = context.watch();
     GithubModel gitModel = context.watch();
     TwitterModel twitterModel = context.watch();
+    MSEmailModel mailModel = context.watch();
+    MSSharedFilesModel fileModel = context.watch();
+
     return LayoutBuilder(
       builder: (_, constraints) {
         /// Responsively size tab bars
@@ -91,15 +96,15 @@ class _SocialActivitySectionState extends State<SocialActivitySection> {
               break;
             case ContactStoreType.Microsoft:
               list1Title = "EMAILS FROM LAST WEEK";
-              list1 = twitterModel.allTweets
-                  .map((tweet) => OutlookMailCard(tweet))
+              list1 = mailModel.eMails
+                  .map((mail) => OutlookMailCard(mail))
                   .take(maxItems)
                   .toList();
               list1Placeholder = TwitterPlaceholder();
               icon1 = StyledIcons.mailActive;
               list2Title = "FILES SHARED";
-              list2 = gitModel.allEvents
-                  .map((event) => OneDriveFileCard(event))
+              list2 = fileModel.theSharedFiles
+                  .map((file) => OneDriveFileCard(file))
                   .take(maxItems)
                   .toList();
               list2Placeholder = GitPlaceholder();
@@ -107,7 +112,7 @@ class _SocialActivitySectionState extends State<SocialActivitySection> {
               break;
           }
         }
-        // GITHUB
+        // GITHUB or Files
         else if (sectionType == DashboardSocialSectionType.Git) {
           switch (AppGlobals.contactStoreType) {
             case ContactStoreType.Google:
@@ -129,22 +134,22 @@ class _SocialActivitySectionState extends State<SocialActivitySection> {
             case ContactStoreType.Microsoft:
               list1Title = "FILES SHARED";
               list1Placeholder = GitPlaceholder();
-              list1 = gitModel.allEvents
-                  .map((event) => OneDriveFileCard(event))
+              list1 = fileModel.theSharedFiles
+                  .map((file) => OneDriveFileCard(file))
                   .take(maxItems)
                   .toList();
               icon1 = StyledIcons.fileActive;
               list2Title = "STARRED";
               list2Placeholder = GitPlaceholder(isTrending: true);
-              list2 = gitModel.popularRepos
-                  .map((repo) => GitRepoListItem(repo))
+              list2 = fileModel.theSharedFiles
+                  .map((file) => OneDriveFileCard(file))
                   .take(maxItems)
                   .toList();
               icon2 = StyledIcons.fileActive;
               break;
           }
         }
-        // TWITTER
+        // TWITTER or Mails
         else if (sectionType == DashboardSocialSectionType.Twitter) {
           switch (AppGlobals.contactStoreType) {
             case ContactStoreType.Google:
@@ -164,15 +169,15 @@ class _SocialActivitySectionState extends State<SocialActivitySection> {
               icon2 = StyledIcons.twitterActive;
               break;
             case ContactStoreType.Microsoft:
-              list1 = twitterModel.allTweets
-                  .map((e) => TweetListItem(e))
+              list1 = mailModel.eMails
+                  .map((mail) => OutlookMailCard(mail))
                   .take(maxItems)
                   .toList();
               list1Placeholder = TwitterPlaceholder();
               list1Title = "EMAILS FROM LAST WEEK";
               icon1 = StyledIcons.mailActive;
-              list2 = twitterModel.popularTweets
-                  .map((e) => TweetListItem(e))
+              list2 = mailModel.eMails
+                  .map((mail) => OutlookMailCard(mail))
                   .take(maxItems)
                   .toList();
               list2Placeholder = TwitterPlaceholder(isPopular: true);

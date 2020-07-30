@@ -1,34 +1,52 @@
 import 'package:flokk/_internal/components/spacing.dart';
-import 'package:flokk/data/git_event_data.dart';
+import 'package:flokk/services/msgraph/models/shared_files.dart';
 import 'package:flokk/styled_components/styled_icons.dart';
 import 'package:flokk/styles.dart';
 import 'package:flokk/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flokk/app_extensions.dart';
 
-/// Item Renderer for Git Events
+/// Item Renderer for shared OneDrive file card
 class OneDriveFileCard extends StatelessWidget {
-  final GitEvent gitEvent;
+  final SharedFile file;
 
-  const OneDriveFileCard(this.gitEvent, {Key key}) : super(key: key);
+  const OneDriveFileCard(this.file, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     AppTheme theme = context.watch();
-    var cardTimeText = TextStyles.Body2.textColor(theme.txt);
-    var cardContentText = TextStyles.H2.textColor(theme.txt);
+    final cardTimeText = TextStyles.Body2.textColor(theme.txt);
+    final cardContentText = TextStyles.H2.textColor(theme.txt);
+    final f = DateFormat('hh:mm MM-dd');
+
+    Widget fileIcon;
+    switch (file.resourceVisualization.type) {
+      case "PowerPoint":
+        fileIcon = Image(image: StyledIcons.ppt);
+        break;
+      case "Excel":
+        fileIcon = Image(image: StyledIcons.excel);
+        break;
+      case "Word":
+        fileIcon = Image(image: StyledIcons.word);
+        break;
+      default:
+        fileIcon = Image(image: StyledIcons.label);
+        break;
+    }
 
     return Column(
       children: [
         Row(
           children: [
-            Image(image: StyledIcons.ppt),
+            fileIcon,
             Flexible(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Contoso Research and Devvelopment Spend ",
+                  Text(file.resourceVisualization.title,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                       style: TextStyles.Body1.textHeight(1.4)
@@ -36,7 +54,8 @@ class OneDriveFileCard extends StatelessWidget {
                   VSpace(Insets.xs),
                   Row(
                     children: [
-                      Text("Isaiah Langer", style: cardContentText),
+                      Text(file.lastShared.sharedBy.displayName,
+                          style: cardContentText),
                       Text(" shared", style: cardTimeText),
                       Container(
                               width: 4,
@@ -45,7 +64,12 @@ class OneDriveFileCard extends StatelessWidget {
                               decoration: BoxDecoration(
                                   color: Colors.black, shape: BoxShape.circle))
                           .opacity(0.9),
-                      Text("Yesterday", style: cardTimeText).opacity(0.6),
+                      Text(
+                        f.format(
+                          DateTime.parse(file.lastShared.sharedDateTime),
+                        ),
+                        style: cardTimeText,
+                      ).opacity(0.6),
                     ],
                   ),
                 ],

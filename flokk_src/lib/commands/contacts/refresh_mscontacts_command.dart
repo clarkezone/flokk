@@ -35,6 +35,7 @@ class RefreshMSContactsCommand extends AbstractCommand
             n.nameFull = p.displayName;
             n.nameFamily = p.surname;
             n.nameGiven = p.givenName;
+            n.jobTitle = p.jobTitle;
             //Add camefrommsft flag
             contactsModel.addContact(n);
           }

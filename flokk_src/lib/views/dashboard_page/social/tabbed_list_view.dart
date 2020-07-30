@@ -95,8 +95,8 @@ class TabbedListView extends StatelessWidget {
         /// Content
         Container(
           child: Container(
-            margin: EdgeInsets.all(Insets.l)
-                .copyWith(left: Insets.m, right: Insets.m, top: Insets.m * 1.5),
+            margin: EdgeInsets.only(
+                left: Insets.m, right: Insets.m, top: Insets.m * 1.5),
             child: PlaceholderContentSwitcher(
               hasContent: () =>
                   firstSelected ? list1.isNotEmpty : list2.isNotEmpty,
