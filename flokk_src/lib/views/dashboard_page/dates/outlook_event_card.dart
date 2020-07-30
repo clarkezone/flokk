@@ -1,26 +1,24 @@
 import 'package:flokk/_internal/components/spacing.dart';
 import 'package:flokk/app_extensions.dart';
 import 'package:flokk/data/contact_data.dart';
+import 'package:flokk/services/msgraph/models/calender_event.dart';
 import 'package:flokk/styled_components/buttons/transparent_btn.dart';
 import 'package:flokk/styled_components/styled_card.dart';
 import 'package:flokk/styled_components/styled_user_avatar.dart';
 import 'package:flokk/styles.dart';
 import 'package:flokk/themes.dart';
-import 'package:flokk/views/main_scaffold/main_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class OutlookEventCard extends StatelessWidget {
-  const OutlookEventCard(this.contact, this.event, {Key key}) : super(key: key);
 
-  static DateFormat get monthDayFmt => DateFormat("MMMMEEEEd");
+  const OutlookEventCard(this.event, {Key key}) : super(key: key);
 
-  final ContactData contact;
-  final DateMixin event;
+  static DateFormat get timeFmt => DateFormat.jm();
 
-  bool get isBirthday => event is BirthdayData;
+  final CalendarEvent event;
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +26,11 @@ class OutlookEventCard extends StatelessWidget {
     var cardTimeText = TextStyles.H2.textColor(theme.txt);
     var cardContentText = TextStyles.Body2.textColor(theme.txt);
 
+    var startTime = DateTime.tryParse(event.start.dateTime);
+    var endTime = DateTime.tryParse(event.end.dateTime);
+
     return TransparentBtn(
-      onPressed: () => context
-          .read<MainScaffoldState>()
-          .trySetSelectedContact(contact, showSocial: false),
+      onPressed: () => {},
       borderRadius: Corners.s8,
       contentPadding: EdgeInsets.zero,
       child: StyledCard(
@@ -47,11 +46,11 @@ class OutlookEventCard extends StatelessWidget {
                     children: [
                       VerticalDivider(),
                       Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text("3:00 AM", style: cardTimeText),
+                          Text(startTime != null ? timeFmt.format(startTime) : '', style: cardTimeText),
                           VSpace(Insets.m),
-                          Text("4:00 AM", style: cardTimeText),
+                          Text(endTime != null ? timeFmt.format(endTime) : '', style: cardTimeText),
                         ],
                       ),
                     ],
@@ -66,7 +65,7 @@ class OutlookEventCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                      "Featured Talk: Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor",
+                      event?.subject ?? '',
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                       style: TextStyles.Body1.textHeight(1.4)
@@ -80,18 +79,20 @@ class OutlookEventCard extends StatelessWidget {
                         semanticLabel: 'Meeting location',
                       ),
                       HSpace(Insets.xs),
-                      Text("Microsoft Teams Meeting", style: cardContentText),
+                      Text(event?.location?.displayName ?? '', style: cardContentText),
                     ],
                   ).opacity(0.6),
                   VSpace(Insets.m),
                   Row(
-                    children: [
-                      StyledUserAvatar(contact: contact, size: 32),
+                    children: event?.attendees?.map((attendee) => [
+                      StyledUserAvatar(
+                        contact: ContactData()
+                          ..nameGiven = attendee?.emailAddress?.name ?? '',
+                        useInitials: true,
+                        size: 32,
+                      ),
                       HSpace(Insets.sm),
-                      StyledUserAvatar(contact: contact, size: 32),
-                      HSpace(Insets.sm),
-                      StyledUserAvatar(contact: contact, size: 32),
-                    ],
+                    ])?.expand((i) => i)?.toList() ?? [],
                   ),
                 ],
               ),

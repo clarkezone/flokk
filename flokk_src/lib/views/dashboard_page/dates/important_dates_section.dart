@@ -5,6 +5,7 @@ import 'package:flokk/_internal/components/spacing.dart';
 import 'package:flokk/app_extensions.dart';
 import 'package:flokk/data/contact_data.dart';
 import 'package:flokk/models/contacts_model.dart';
+import 'package:flokk/models/msgraph_calendar_model.dart';
 import 'package:flokk/styles.dart';
 import 'package:flokk/themes.dart';
 import 'package:flokk/views/dashboard_page/dates/outlook_event_card.dart';
@@ -22,17 +23,15 @@ class UpcomingActivitiesSection extends StatelessWidget {
   Widget build(BuildContext context) {
     AppTheme theme = context.watch();
     ContactsModel contactsModel = context.watch();
+    MSGraphCalendarModel calendarModel = context.watch();
     List<Tuple2<ContactData, DateMixin>> contactsWithDate =
         contactsModel.upcomingDateContacts;
     TextStyle headerStyle = TextStyles.T1;
 
     /// Create list of ItemRenderers
-    List<Widget> kids = contactsWithDate
-        .map((cWithD) =>
-            AppGlobals.contactStoreType == ContactStoreType.Microsoft
-                ? OutlookEventCard(cWithD.item1, cWithD.item2)
-                : ImportantEventCard(cWithD.item1, cWithD.item2))
-        .toList();
+    List<Widget> kids = AppGlobals.contactStoreType == ContactStoreType.Microsoft
+        ? calendarModel.events.value.map((event) => OutlookEventCard(event)).toList()
+        : contactsWithDate.map((cWithD) => ImportantEventCard(cWithD.item1, cWithD.item2)).toList();
 
     /// Build list
     return LayoutBuilder(
