@@ -57,6 +57,18 @@ dependencies:
       url: git://github.com/google/flutter-desktop-embedding.git
       path: plugins/window_size
       ref: be63fd13223fa814e029ae9d36ac7f1eb3800aa9
+  
+  webviewpopupauth:
+    git:
+      url: https://github.com/clarkezone/flutter_win_webview.git
+      path: ./webview_popupauth
+
+dependency_overrides:
+  shared_preferences:
+    git:
+      url: git://github.com/franciscojma86/plugins.git
+      path: packages/shared_preferences/shared_preferences
+      ref: 4ae292668479de7bf8122fb60bd5a0fa37840909
 
 dev_dependencies:
   build_runner: ^1.0.0 #in order to run codegen you need to be on the flutter stable branch, then type this command: flutter pub run build_runner build

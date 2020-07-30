@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flokk/_internal/components/no_glow_scroll_behavior.dart';
 import 'package:flokk/_internal/page_routes.dart';
 import 'package:flokk/app_extensions.dart';
@@ -18,7 +20,9 @@ import 'package:flokk/themes.dart';
 import 'package:flokk/views/welcome/welcome_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import 'models/msgraph_calendar_model.dart';
@@ -39,12 +43,45 @@ bool tryAndLoadDevSpike(BuildContext c) {
   return spike != null;
 }
 
+// Windows only
+MethodChannel channel;
+SharedPreferences prefs;
+
+void initNotSoSecureStorageOnWindows() async {
+  channel = MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
+  prefs = await SharedPreferences.getInstance();
+
+  channel.setMockMethodCallHandler((MethodCall call) async {
+    switch(call.method) {
+      case 'write': {
+        await prefs.setString(call.arguments['key'] as String, call.arguments['value'] as String);
+        return null;
+      }
+      break;
+      case 'read': {
+        return prefs.getString(call.arguments['key'] as String);
+      }
+      break;
+      case 'delete': {
+        await prefs.setString(call.arguments['key'] as String, null);
+        return null;
+      }
+      break;
+    }
+  });
+}
+
 void main() {
   /// Need to add this in order to run on Desktop. See https://github.com/flutter/flutter/wiki/Desktop-shells#target-platform-override
   if (UniversalPlatform.isWindows ||
       UniversalPlatform.isLinux ||
       UniversalPlatform.isMacOS) {
     debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
+  }
+
+  if(Platform.isWindows)
+  {
+    initNotSoSecureStorageOnWindows();
   }
 
   /// Initialize models, negotiate dependencies
