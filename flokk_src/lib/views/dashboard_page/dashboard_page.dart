@@ -20,7 +20,7 @@ class DashboardPage extends StatefulWidget {
 class DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
-    return ConstrainedFlexView(850,
+    return ConstrainedFlexView(850 + 170.0,
         scrollPadding: EdgeInsets.only(right: Insets.m),
         child: Column(
           children: <Widget>[
@@ -30,7 +30,7 @@ class DashboardPageState extends State<DashboardPage> {
             SocialActivitySection().padding(horizontal: Insets.lGutter).flexible(),
             SizedBox(height: Insets.l * 1.5),
             RepaintBoundary(
-              child: UpcomingActivitiesSection().height(170).padding(horizontal: Insets.lGutter),
+              child: UpcomingActivitiesSection().height(170 * 2.0).padding(horizontal: Insets.lGutter),
             ),
             SizedBox(height: Insets.l),
           ],
