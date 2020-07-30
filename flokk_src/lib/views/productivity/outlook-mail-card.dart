@@ -1,9 +1,11 @@
 import 'package:flokk/_internal/components/spacing.dart';
+import 'package:flokk/_internal/utils/date_utils.dart';
+import 'package:flokk/data/contact_data.dart';
 import 'package:flokk/services/msgraph/models/email.dart';
+import 'package:flokk/styled_components/styled_user_avatar.dart';
 import 'package:flokk/styles.dart';
 import 'package:flokk/themes.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flokk/app_extensions.dart';
 
@@ -18,7 +20,6 @@ class OutlookMailCard extends StatelessWidget {
     AppTheme theme = context.watch();
     final normalText = TextStyles.Body2.textColor(theme.txt);
     final boldText = TextStyles.H2.textColor(theme.txt);
-    final f = DateFormat('hh:mm MM-dd');
 
     return Column(
       children: [
@@ -38,12 +39,12 @@ class OutlookMailCard extends StatelessWidget {
               width: 32,
               height: 32,
               margin: const EdgeInsets.only(top: 6, right: 12, bottom: 6),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                shape: BoxShape.circle,
+              child: StyledUserAvatar(
+                contact: ContactData()
+                  ..nameGiven = mail.from.emailAddress.name ?? '',
+                useInitials: true,
+                size: 32,
               ),
-              // child:
-              //     StyledUserAvatar(contact: null, size: 32, useInitials: true),
             ).opacity(0.9),
             Expanded(
               child: Column(
@@ -65,9 +66,11 @@ class OutlookMailCard extends StatelessWidget {
                 ],
               ),
             ),
-            Text(f.format(DateTime.parse(mail.sentDateTime)), style: normalText)
-                .opacity(0.6)
-                .padding(top: Insets.sm),
+            Text(
+              DateFormats.friendlyDateTime(
+                  DateTime.parse(mail.sentDateTime), 'MM-dd'),
+              style: normalText,
+            ).opacity(0.6).padding(top: Insets.sm),
             HSpace(Insets.m),
           ],
         ),
