@@ -24,9 +24,15 @@ class SocialActivitySection extends StatefulWidget {
 
 class _SocialActivitySectionState extends State<SocialActivitySection> {
   void _handleTabPressed(int index) {
-    if (index == 0) context.read<AppModel>().dashSocialSection = DashboardSocialSectionType.All;
-    if (index == 1) context.read<AppModel>().dashSocialSection = DashboardSocialSectionType.Twitter;
-    if (index == 2) context.read<AppModel>().dashSocialSection = DashboardSocialSectionType.Git;
+    if (index == 0)
+      context.read<AppModel>().dashSocialSection =
+          DashboardSocialSectionType.All;
+    if (index == 1)
+      context.read<AppModel>().dashSocialSection =
+          DashboardSocialSectionType.Twitter;
+    if (index == 2)
+      context.read<AppModel>().dashSocialSection =
+          DashboardSocialSectionType.Git;
     context.read<AppModel>().scheduleSave();
   }
 
@@ -40,10 +46,12 @@ class _SocialActivitySectionState extends State<SocialActivitySection> {
         /// Responsively size tab bars
         TextStyle headerStyle = TextStyles.T1;
 
-        bool useTabView = constraints.maxWidth < PageBreaks.TabletPortrait - 100;
+        bool useTabView =
+            constraints.maxWidth < PageBreaks.TabletPortrait - 100;
 
         /// Determine which tab should be selected
-        var sectionType = context.select<AppModel, DashboardSocialSectionType>((model) => model.dashSocialSection);
+        var sectionType = context.select<AppModel, DashboardSocialSectionType>(
+            (model) => model.dashSocialSection);
         int tabIndex = 0;
         if (sectionType == DashboardSocialSectionType.Twitter) tabIndex = 1;
         if (sectionType == DashboardSocialSectionType.Git) tabIndex = 2;
@@ -62,11 +70,17 @@ class _SocialActivitySectionState extends State<SocialActivitySection> {
         // ALL
         if (sectionType == DashboardSocialSectionType.All) {
           list1Title = "TWITTER RECENT ACTIVITY";
-          list1 = twitterModel.allTweets.map((tweet) => TweetListItem(tweet)).take(maxItems).toList();
+          list1 = twitterModel.allTweets
+              .map((tweet) => TweetListItem(tweet))
+              .take(maxItems)
+              .toList();
           list1Placeholder = TwitterPlaceholder();
           icon1 = StyledIcons.twitterActive;
           list2Title = "GITHUB RECENT ACTIVITY";
-          list2 = gitModel.allEvents.map((event) => GitEventListItem(event)).take(maxItems).toList();
+          list2 = gitModel.allEvents
+              .map((event) => GitEventListItem(event))
+              .take(maxItems)
+              .toList();
           list2Placeholder = GitPlaceholder();
           icon2 = StyledIcons.githubActive;
         }
@@ -74,20 +88,32 @@ class _SocialActivitySectionState extends State<SocialActivitySection> {
         else if (sectionType == DashboardSocialSectionType.Git) {
           list1Title = "GITHUB RECENT ACTIVITY";
           list1Placeholder = GitPlaceholder();
-          list1 = gitModel.allEvents.map((event) => GitEventListItem(event)).take(maxItems).toList();
+          list1 = gitModel.allEvents
+              .map((event) => GitEventListItem(event))
+              .take(maxItems)
+              .toList();
           icon1 = StyledIcons.githubActive;
           list2Title = "TRENDING REPOSITORIES";
           list2Placeholder = GitPlaceholder(isTrending: true);
-          list2 = gitModel.popularRepos.map((repo) => GitRepoListItem(repo)).take(maxItems).toList();
+          list2 = gitModel.popularRepos
+              .map((repo) => GitRepoListItem(repo))
+              .take(maxItems)
+              .toList();
           icon2 = StyledIcons.githubActive;
         }
         // TWITTER
         else if (sectionType == DashboardSocialSectionType.Twitter) {
-          list1 = twitterModel.allTweets.map((e) => TweetListItem(e)).take(maxItems).toList();
+          list1 = twitterModel.allTweets
+              .map((e) => TweetListItem(e))
+              .take(maxItems)
+              .toList();
           list1Placeholder = TwitterPlaceholder();
           list1Title = "TWITTER RECENT ACTIVITY";
           icon1 = StyledIcons.twitterActive;
-          list2 = twitterModel.popularTweets.map((e) => TweetListItem(e)).take(maxItems).toList();
+          list2 = twitterModel.popularTweets
+              .map((e) => TweetListItem(e))
+              .take(maxItems)
+              .toList();
           list2Placeholder = TwitterPlaceholder(isPopular: true);
           list2Title = "POPULAR TWEETS";
           icon2 = StyledIcons.twitterActive;
@@ -96,43 +122,79 @@ class _SocialActivitySectionState extends State<SocialActivitySection> {
         var sections = ["All", "Twitter", "GitHub", "Linked-in"];
 
         Widget sectionsPopup() => PopupMenuButton(
-          itemBuilder: (context) {
-            var list = <PopupMenuEntry<Object>>[]
-              ..add(PopupMenuItem(child: Row(
-                children: <Widget>[
-                  Icon(Icons.select_all, size: Sizes.iconMed, color: theme.accent1Darker),
-                  HSpace(Insets.sm),
-                  Text(sections[0].toUpperCase(), style: TextStyles.Btn.textColor(theme.accent1Darker),),
-                ],
-              ), value: 0,),)
-              ..add(PopupMenuItem(child: Row(
-                children: <Widget>[
-                  StyledImageIcon(StyledIcons.twitterActive, color: theme.accent1Darker),
-                  HSpace(Insets.sm),
-                  Text(sections[1].toUpperCase(), style: TextStyles.Btn.textColor(theme.accent1Darker)),
-                ],
-              ), value: 1,),)
-              ..add(PopupMenuItem(child: Row(
-                children: <Widget>[
-                  StyledImageIcon(StyledIcons.githubActive, color: theme.accent1Darker),
-                  HSpace(Insets.sm),
-                  Text(sections[2].toUpperCase(), style: TextStyles.Btn.textColor(theme.accent1Darker)),
-                ],
-              ), value: 2,),)
-              ..add(PopupMenuItem(child: Row(
-                children: <Widget>[
-                  StyledImageIcon(StyledIcons.linkedinActive, color: theme.accent1Darker),
-                  HSpace(Insets.sm),
-                  Text(sections[3].toUpperCase(), style: TextStyles.Btn.textColor(theme.accent1Darker)),
-                ],
-              ), value: 3,),);
-            return list;
-          },
-          onSelected: (value) {
-            _handleTabPressed(value);
-          },
-          icon: Icon(Icons.more_vert, size: 22, color: theme.accent1Darker,),
-        );
+            itemBuilder: (context) {
+              var list = <PopupMenuEntry<Object>>[]
+                ..add(
+                  PopupMenuItem(
+                    child: Row(
+                      children: <Widget>[
+                        Icon(Icons.select_all,
+                            size: Sizes.iconMed, color: theme.accent1Darker),
+                        HSpace(Insets.sm),
+                        Text(
+                          sections[0].toUpperCase(),
+                          style: TextStyles.Btn.textColor(theme.accent1Darker),
+                        ),
+                      ],
+                    ),
+                    value: 0,
+                  ),
+                )
+                ..add(
+                  PopupMenuItem(
+                    child: Row(
+                      children: <Widget>[
+                        StyledImageIcon(StyledIcons.twitterActive,
+                            color: theme.accent1Darker),
+                        HSpace(Insets.sm),
+                        Text(sections[1].toUpperCase(),
+                            style:
+                                TextStyles.Btn.textColor(theme.accent1Darker)),
+                      ],
+                    ),
+                    value: 1,
+                  ),
+                )
+                ..add(
+                  PopupMenuItem(
+                    child: Row(
+                      children: <Widget>[
+                        StyledImageIcon(StyledIcons.githubActive,
+                            color: theme.accent1Darker),
+                        HSpace(Insets.sm),
+                        Text(sections[2].toUpperCase(),
+                            style:
+                                TextStyles.Btn.textColor(theme.accent1Darker)),
+                      ],
+                    ),
+                    value: 2,
+                  ),
+                )
+                ..add(
+                  PopupMenuItem(
+                    child: Row(
+                      children: <Widget>[
+                        StyledImageIcon(StyledIcons.linkedinActive,
+                            color: theme.accent1Darker),
+                        HSpace(Insets.sm),
+                        Text(sections[3].toUpperCase(),
+                            style:
+                                TextStyles.Btn.textColor(theme.accent1Darker)),
+                      ],
+                    ),
+                    value: 3,
+                  ),
+                );
+              return list;
+            },
+            onSelected: (value) {
+              _handleTabPressed(value);
+            },
+            icon: Icon(
+              Icons.more_vert,
+              size: 22,
+              color: theme.accent1Darker,
+            ));
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,10 +202,12 @@ class _SocialActivitySectionState extends State<SocialActivitySection> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                OneLineText("SOCIAL ACTIVITIES", style: headerStyle.textColor(theme.accent1Darker)),
+                OneLineText("SOCIAL ACTIVITIES",
+                    style: headerStyle.textColor(theme.accent1Darker)),
                 OneLineText(
                   sections[tabIndex].toUpperCase(),
-                  style: TextStyles.Footnote.textColor(theme.isDark ? theme.greyStrong : theme.grey),
+                  style: TextStyles.Footnote.textColor(
+                      theme.isDark ? theme.greyStrong : theme.grey),
                 ).alignment(Alignment.centerRight).expanded(),
                 sectionsPopup(),
               ],
