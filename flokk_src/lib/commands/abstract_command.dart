@@ -90,15 +90,16 @@ mixin AuthorizedServiceCommandMixin on AbstractCommand {
       ));
     }
 
-    /// Refresh token if needed
+    //TODO fix this
+    // /// Refresh token if needed
     await RefreshAuthTokensCommand(context).execute(onlyIfExpired: true);
 
-    /// Execute command
+    // /// Execute command
     HttpResponse r = await cmd();
 
-    /// Check for errors
-    if (!ignoreErrors && r != null) {
-      ShowServiceErrorCommand(context).execute(r);
-    }
+    // /// Check for errors
+    // if (!ignoreErrors && r != null) {
+    //   ShowServiceErrorCommand(context).execute(r);
+    // }
   }
 }
